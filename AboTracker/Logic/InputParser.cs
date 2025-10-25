@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.Json;
 using AboTracker.Model;
 
@@ -40,11 +41,15 @@ public static class InputParser
         }
     }
 
-    public static void PrintSubscriptions()
+    public static string PrintSubscriptions()
     {
+        var sb = new StringBuilder();
+        
         foreach(Subscription s in _aboList)
         {
-            Console.WriteLine(s.ToString());
+            sb.AppendLine(s.ToString());
         }
+        
+        return sb.ToString();
     }
 }

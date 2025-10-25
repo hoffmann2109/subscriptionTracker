@@ -10,6 +10,9 @@ public class MainWindowUi : Gtk.ApplicationWindow
     public MainWindowUi(Gtk.Application app)
     {
         _logic = new MainWindowLogic();
+        InputParser.InitializeArray();
+        _logic.UpdateMessage(InputParser.PrintSubscriptions());
+        
         // Create window and add Components:
         this.Application = app; 
         this.Title = "Simple Abo Tracker";
@@ -38,7 +41,7 @@ public class MainWindowUi : Gtk.ApplicationWindow
         // Make button clickable:
         button.OnClicked += (sender, e) => 
         {
-            _logic.UpdateMessage();
+            _logic.UpdateMessage("Button was clicked");
             label.SetLabel(_logic.CurrentMessage);
         };
     }
