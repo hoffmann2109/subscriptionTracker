@@ -8,15 +8,9 @@ internal static class AboTracker
     {
         var app = Gtk.Application.New("org.abo.tracker", Gio.ApplicationFlags.DefaultFlags);
         
-        app.OnActivate += (sender, e) => {
-            var window = new ApplicationWindow();
-            window.Application = app; 
-            window.Title = "Simple Abo Tracker";
-            window.SetDefaultSize(600, 400);
-            
-            var label = Label.New("Hi, I'm a simple Abo Tracker");
-            window.SetChild(label);
-            
+        app.OnActivate += (sender, e) =>
+        {
+            var window = new MainWindow(app);
             window.Show();
         };
         
