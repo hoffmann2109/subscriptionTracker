@@ -1,4 +1,5 @@
-﻿using Gtk;
+﻿using AboTracker.GUI;
+using Gtk;
 
 namespace AboTracker;
 
@@ -10,7 +11,7 @@ internal static class AboTracker
         
         app.OnActivate += (sender, e) =>
         {
-            var window = new MainWindow(app);
+            var window = new MainWindowUi(app);
             window.Show();
         };
         

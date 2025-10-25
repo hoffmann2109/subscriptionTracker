@@ -1,11 +1,15 @@
+using AboTracker.Logic;
 using Gtk;
 
-namespace AboTracker;
+namespace AboTracker.GUI;
 
-public class MainWindow : Gtk.ApplicationWindow
+public class MainWindowUi : Gtk.ApplicationWindow
 {
-    public MainWindow(Gtk.Application app)
+    private readonly MainWindowLogic _logic;
+    
+    public MainWindowUi(Gtk.Application app)
     {
+        _logic = new MainWindowLogic();
         // Create window and add Components:
         this.Application = app; 
         this.Title = "Simple Abo Tracker";
@@ -23,7 +27,7 @@ public class MainWindow : Gtk.ApplicationWindow
         box.SetMarginEnd(12);
             
         // Add a label and a button:
-        var label = Label.New("Hi, I'm a simple Abo Tracker");
+        var label = Label.New(_logic.CurrentMessage);
         var button = Gtk.Button.NewWithLabel("Click Me!");
         box.Append(label);
         box.Append(button);
@@ -34,7 +38,8 @@ public class MainWindow : Gtk.ApplicationWindow
         // Make button clickable:
         button.OnClicked += (sender, e) => 
         {
-            label.SetLabel("You clicked the button!");
+            _logic.UpdateMessage();
+            label.SetLabel(_logic.CurrentMessage);
         };
     }
 }
