@@ -19,4 +19,10 @@ public class Subscription
 
     [JsonPropertyName("nextPaymentDate")]
     public string NextPaymentDate { get; set; } = string.Empty;
+    
+    public override string ToString()
+    {
+        // You can format this string however you like
+        return $"{Name} - ${Amount} ({PaymentPeriod}) - Next Payment: {NextPaymentDate}";
+    }
 }

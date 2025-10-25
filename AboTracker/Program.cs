@@ -10,7 +10,7 @@ internal static class AboTracker
     {
         var app = Gtk.Application.New("org.abo.tracker", Gio.ApplicationFlags.DefaultFlags);
         InputParser.InitializeArray();
-            
+        InputParser.PrintSubscriptions();
         app.OnActivate += (sender, e) =>
         {
             
