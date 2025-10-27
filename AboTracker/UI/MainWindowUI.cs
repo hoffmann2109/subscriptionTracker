@@ -1,6 +1,8 @@
 using AboTracker.Logic;
 using AboTracker.Model;
+using Gio.Internal;
 using Gtk;
+using Application = Gtk.Application;
 
 namespace AboTracker.UI;
 
@@ -74,15 +76,9 @@ public class MainWindowUi : ApplicationWindow
         
         button.OnClicked += (sender, e) => 
         {
-            // TODO: Implement add logic
-            label.SetLabel("Abo was added!");
-            CreateAndShowAddDialog();
+            var addDialog = new AddDialogUi(this, ReloadSubscriptionList);
+            addDialog.CreateAndShowAddDialog();
         };
-    }
-
-    private void CreateAndShowAddDialog()
-    {
-        
     }
 
     // Create Boxes from Subscription Elements:
