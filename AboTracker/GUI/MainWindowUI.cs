@@ -39,12 +39,7 @@ public class MainWindowUi : ApplicationWindow
     // Set layout and add all boxes to main box
     private void SetupContainerStructure()
     {
-        _navigationContainer.SetMarginTop(12);
-        _navigationContainer.SetMarginBottom(12);
-        _navigationContainer.SetMarginStart(12);
-        _navigationContainer.SetMarginEnd(12);
-        _navigationContainer.Append(Label.New("Navigation is done here"));
-        _rootBox.Append(_navigationContainer);
+        SetupNavigationBar();
         
         _rootBox.Append(Separator.New(Orientation.Horizontal));
         
@@ -62,6 +57,26 @@ public class MainWindowUi : ApplicationWindow
         _calculationContainer.SetMarginEnd(12);
         _calculationContainer.Append(Label.New("Calculations are done here"));
         _rootBox.Append(_calculationContainer);
+    }
+
+    private void SetupNavigationBar()
+    {
+        _navigationContainer.SetMarginTop(12);
+        _navigationContainer.SetMarginBottom(12);
+        _navigationContainer.SetMarginStart(12);
+        _navigationContainer.SetMarginEnd(12);
+        var label = Label.New("Navigation is done here");
+        _navigationContainer.Append(label);
+        _rootBox.Append(_navigationContainer);
+        
+        var button = Button.NewWithLabel("Add");
+        _navigationContainer.Append(button);
+        
+        button.OnClicked += (sender, e) => 
+        {
+            // TODO: Implement add logic
+            label.SetLabel("Abo was added!");
+        };
     }
 
     // Create Boxes from Subscription Elements:
