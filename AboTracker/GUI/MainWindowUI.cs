@@ -8,22 +8,32 @@ public class MainWindowUi : Gtk.ApplicationWindow
 {
     private readonly Box _mainContainer;
     
-    public MainWindowUi(Gtk.Application app)
+    public MainWindowUi(Application app)
+    {
+        AppSetup(app);
+        
+        _mainContainer = Box.New(Orientation.Vertical, 12);
+        SetupContainerStructure();
+        
+        InputParser.InitializeArray();
+        CreateElementsFromArray();
+    }
+
+    private void AppSetup(Application app)
     {
         // Create window and add Components:
         this.Application = app; 
         this.Title = "Simple Abo Tracker";
         this.SetDefaultSize(600, 400);
-        
-        _mainContainer = Box.New(Orientation.Vertical, 12);
+    }
+
+    private void SetupContainerStructure()
+    {
         _mainContainer.SetMarginTop(12);
         _mainContainer.SetMarginBottom(12);
         _mainContainer.SetMarginStart(12);
         _mainContainer.SetMarginEnd(12);
         this.SetChild(_mainContainer);
-        
-        InputParser.InitializeArray();
-        CreateElementsFromArray();
     }
 
     private void CreateElementsFromArray()
