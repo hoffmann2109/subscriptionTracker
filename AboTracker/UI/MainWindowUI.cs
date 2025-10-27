@@ -113,9 +113,21 @@ public class MainWindowUi : ApplicationWindow
             
             if (success)
             {
-                label.SetLabel("Abo was deleted!");
                 StorageManager.SaveListToJson();
+                ReloadSubscriptionList();
             }
         };
+    }
+    
+    private void ReloadSubscriptionList()
+    {
+        while (_subscriptionListContainer.GetFirstChild() is { } child)
+        {
+            _subscriptionListContainer.Remove(child);
+        }
+        
+        StorageManager.InitializeArray();
+        
+        CreateElementsFromArray(StorageManager.Subscriptions);
     }
 }
