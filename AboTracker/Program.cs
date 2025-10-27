@@ -1,4 +1,5 @@
 ﻿using AboTracker.GUI;
+using AboTracker.Logic;
 using Gtk;
 
 namespace AboTracker;
@@ -10,7 +11,8 @@ internal static class AboTracker
         var app = Gtk.Application.New("org.abo.tracker", Gio.ApplicationFlags.DefaultFlags);
         app.OnActivate += (sender, e) =>
         {
-            var window = new MainWindowUi(app);
+            InputParser.InitializeArray();
+            var window = new MainWindowUi(app, InputParser.Subscriptions);
             window.Show();
         };
         

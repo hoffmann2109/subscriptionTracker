@@ -6,39 +6,59 @@ namespace AboTracker.GUI;
 
 public class MainWindowUi : Gtk.ApplicationWindow
 {
-    private readonly Box _mainContainer;
+    // Boxes:
+    private readonly Box _rootBox;
+    private readonly Box _subscriptionListContainer;
+    private readonly Box _calculationContainer;
     
-    public MainWindowUi(Application app)
+    // Main Window:
+    public MainWindowUi(Application app, IEnumerable<Subscription> subscriptions)
     {
-        AppSetup(app);
-        InputParser.InitializeArray();
+        AppUiSetup(app);
         
-        _mainContainer = Box.New(Orientation.Vertical, 12);
+        // Main Box:
+        _rootBox = Box.New(Orientation.Vertical, 6);
+        this.SetChild(_rootBox);
+        
+        // Further Boxes:
+        _subscriptionListContainer = Box.New(Orientation.Vertical, 12);
+        _calculationContainer = Box.New(Orientation.Vertical, 6);
         SetupContainerStructure();
+        CreateElementsFromArray(subscriptions);
     }
 
-    private void AppSetup(Application app)
+    private void AppUiSetup(Application app)
     {
-        // Create window and add Components:
         this.Application = app; 
         this.Title = "Simple Abo Tracker";
         this.SetDefaultSize(600, 400);
     }
 
+    // Set layout and add all boxes to main box
     private void SetupContainerStructure()
     {
-        _mainContainer.SetMarginTop(12);
-        _mainContainer.SetMarginBottom(12);
-        _mainContainer.SetMarginStart(12);
-        _mainContainer.SetMarginEnd(12);
-        this.SetChild(_mainContainer);
+        _subscriptionListContainer.SetMarginTop(12);
+        _subscriptionListContainer.SetMarginBottom(12);
+        _subscriptionListContainer.SetMarginStart(12);
+        _subscriptionListContainer.SetMarginEnd(12);
+        _rootBox.Append(_subscriptionListContainer);
         
-        CreateElementsFromArray();
+        var separator = Separator.New(Gtk.Orientation.Horizontal);
+        _rootBox.Append(separator);
+        
+        _calculationContainer.SetMarginTop(12);
+        _calculationContainer.SetMarginBottom(12);
+        _calculationContainer.SetMarginStart(12);
+        _calculationContainer.SetMarginEnd(12);
+        var label = Label.New("Calculations are done here");
+        _calculationContainer.Append(label);
+        _rootBox.Append(_calculationContainer);
     }
 
-    private void CreateElementsFromArray()
+    // Create Boxes from Subscription Elements:
+    private void CreateElementsFromArray(IEnumerable<Subscription> subscriptions)
     {   
-        foreach (Subscription s in InputParser.Subscriptions)
+        foreach (Subscription s in subscriptions)
         {
             AddSubscriptionComponent(s);
         }
@@ -60,7 +80,7 @@ public class MainWindowUi : Gtk.ApplicationWindow
         box.Append(button);
         
         // Add box to Window:
-        _mainContainer.Append(box);
+        _subscriptionListContainer.Append(box);
         
         // Make button clickable:
         button.OnClicked += (sender, e) => 
