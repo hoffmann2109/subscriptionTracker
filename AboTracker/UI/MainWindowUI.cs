@@ -2,7 +2,7 @@ using AboTracker.Logic;
 using AboTracker.Model;
 using Gtk;
 
-namespace AboTracker.GUI;
+namespace AboTracker.UI;
 
 public class MainWindowUi : ApplicationWindow
 {
@@ -76,7 +76,13 @@ public class MainWindowUi : ApplicationWindow
         {
             // TODO: Implement add logic
             label.SetLabel("Abo was added!");
+            CreateAndShowAddDialog();
         };
+    }
+
+    private void CreateAndShowAddDialog()
+    {
+        
     }
 
     // Create Boxes from Subscription Elements:
@@ -90,17 +96,24 @@ public class MainWindowUi : ApplicationWindow
 
     private void AddSubscriptionComponent(Subscription sub)
     {
+        // TODO: sort by due date
+        
         // Add a box:
-        var box = Box.New(Orientation.Vertical, 6);
+        var box = Box.New(Orientation.Horizontal, 6);
         box.SetMarginTop(12);
         box.SetMarginBottom(12);
         box.SetMarginStart(12);
         box.SetMarginEnd(12);
             
         // Add a label and a button:
-        var label = Label.New(sub.ToString()); // Use the sub data directly
-        var button = Button.NewWithLabel("Delete");
+        var label = Label.New(sub.ToString());
+        label.SetHexpand(true);
+        label.SetHalign(Align.Start);
         box.Append(label);
+        
+        var button = Button.NewFromIconName("user-trash-symbolic");
+        button.SetTooltipText("Delete subscription");
+        button.SetHexpand(false);
         box.Append(button);
         
         // Add box to Window:

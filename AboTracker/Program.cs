@@ -1,5 +1,5 @@
-﻿using AboTracker.GUI;
-using AboTracker.Logic;
+﻿using AboTracker.Logic;
+using AboTracker.UI;
 using Gtk;
 
 namespace AboTracker;
