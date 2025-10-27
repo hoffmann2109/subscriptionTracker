@@ -11,12 +11,10 @@ public class MainWindowUi : Gtk.ApplicationWindow
     public MainWindowUi(Application app)
     {
         AppSetup(app);
+        InputParser.InitializeArray();
         
         _mainContainer = Box.New(Orientation.Vertical, 12);
         SetupContainerStructure();
-        
-        InputParser.InitializeArray();
-        CreateElementsFromArray();
     }
 
     private void AppSetup(Application app)
@@ -34,6 +32,8 @@ public class MainWindowUi : Gtk.ApplicationWindow
         _mainContainer.SetMarginStart(12);
         _mainContainer.SetMarginEnd(12);
         this.SetChild(_mainContainer);
+        
+        CreateElementsFromArray();
     }
 
     private void CreateElementsFromArray()
