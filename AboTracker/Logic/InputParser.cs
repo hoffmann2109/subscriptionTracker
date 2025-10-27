@@ -41,15 +41,8 @@ public static class InputParser
         }
     }
 
-    public static string PrintSubscriptions()
+    public static string PrintSubscription(int i)
     {
-        var sb = new StringBuilder();
-        
-        foreach(Subscription s in _aboList)
-        {
-            sb.AppendLine(s.ToString());
-        }
-        
-        return sb.ToString();
+        return Subscriptions[i].ToString();
     }
 }

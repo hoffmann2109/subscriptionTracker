@@ -1,48 +1,62 @@
 using AboTracker.Logic;
+using AboTracker.Model;
 using Gtk;
 
 namespace AboTracker.GUI;
 
 public class MainWindowUi : Gtk.ApplicationWindow
 {
-    private readonly MainWindowLogic _logic;
+    private readonly Box _mainContainer;
     
     public MainWindowUi(Gtk.Application app)
     {
-        _logic = new MainWindowLogic();
-        InputParser.InitializeArray();
-        _logic.UpdateMessage(InputParser.PrintSubscriptions());
-        
         // Create window and add Components:
         this.Application = app; 
         this.Title = "Simple Abo Tracker";
         this.SetDefaultSize(600, 400);
-        AddComponents();
+        
+        _mainContainer = Box.New(Orientation.Vertical, 12);
+        _mainContainer.SetMarginTop(12);
+        _mainContainer.SetMarginBottom(12);
+        _mainContainer.SetMarginStart(12);
+        _mainContainer.SetMarginEnd(12);
+        this.SetChild(_mainContainer);
+        
+        InputParser.InitializeArray();
+        CreateElementsFromArray();
     }
 
-    private void AddComponents()
+    private void CreateElementsFromArray()
+    {   
+        foreach (Subscription s in InputParser.Subscriptions)
+        {
+            AddSubscriptionComponent(s);
+        }
+    }
+
+    private void AddSubscriptionComponent(Subscription sub)
     {
         // Add a box:
-        var box = Gtk.Box.New(Gtk.Orientation.Vertical, 12);
+        var box = Box.New(Gtk.Orientation.Vertical, 6);
         box.SetMarginTop(12);
         box.SetMarginBottom(12);
         box.SetMarginStart(12);
         box.SetMarginEnd(12);
             
         // Add a label and a button:
-        var label = Label.New(_logic.CurrentMessage);
-        var button = Gtk.Button.NewWithLabel("Click Me!");
+        var label = Label.New(sub.ToString()); // Use the sub data directly
+        var button = Gtk.Button.NewWithLabel("Delete");
         box.Append(label);
         box.Append(button);
         
         // Add box to Window:
-        this.SetChild(box);
+        _mainContainer.Append(box);
         
         // Make button clickable:
         button.OnClicked += (sender, e) => 
         {
-            _logic.UpdateMessage("Button was clicked");
-            label.SetLabel(_logic.CurrentMessage);
+            // TODO: Implement delete logic
+            label.SetLabel("Abo was deleted!");
         };
     }
 }
