@@ -67,8 +67,6 @@ public class MainWindowUi : ApplicationWindow
         _navigationContainer.SetMarginBottom(12);
         _navigationContainer.SetMarginStart(12);
         _navigationContainer.SetMarginEnd(12);
-        var label = Label.New("Navigation is done here");
-        _navigationContainer.Append(label);
         _rootBox.Append(_navigationContainer);
         
         var button = Button.NewWithLabel("Add");

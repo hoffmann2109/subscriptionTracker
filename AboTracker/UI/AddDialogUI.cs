@@ -8,30 +8,32 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
 {
     private Entry? _nameEntry;
     private Entry? _amountEntry;
-    private Entry? _periodEntry;
-    private Entry? _purchaseDateEntry;
-    private Entry? _nextPaymentEntry;
+    private DropDown? _periodEntry;
+    private MenuButton? _purchaseDateButton;
+    private Calendar? _purchaseDateCalendar;
     private Label? _errorLabel;
-    
+
+    private DateTime _selectedPurchaseDate = DateTime.Today;
+
     public void CreateAndShowAddDialog()
     {
         var dialog = WindowSetup();
-        
+
         var mainBox = AddMainBox();
         dialog.SetChild(mainBox);
-        
+
         AddFormFields(mainBox);
-        
+
         // Button box
         var buttonBox = Box.New(Orientation.Horizontal, 6);
         buttonBox.SetHalign(Align.End);
         buttonBox.SetMarginTop(12);
         mainBox.Append(buttonBox);
-        
+
         AddCancelButton(buttonBox, dialog);
-    
+
         InsertAddButton(buttonBox, dialog);
-        
+
         dialog.Show();
     }
 
@@ -40,90 +42,90 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         var addButton = Button.NewWithLabel("Add Subscription");
         addButton.AddCssClass("suggested-action");
         buttonBox.Append(addButton);
-    
-        addButton.OnClicked += (sender, e) => 
+
+        addButton.OnClicked += (sender, e) =>
         {
-            ValidateInputsAndCreateSubscription();
-        
-            // Reload the list
-            onSubscriptionAdded?.Invoke();
-            
-            dialog.Close();
+            // Only close and reload if validation is successful
+            if (ValidateInputsAndCreateSubscription())
+            {
+                // Reload the list
+                onSubscriptionAdded?.Invoke();
+                dialog.Close();
+            }
         };
     }
 
     private static void AddCancelButton(Box buttonBox, Window dialog)
     {
-        // Cancel button
         var cancelButton = Button.NewWithLabel("Cancel");
         buttonBox.Append(cancelButton);
-    
-        cancelButton.OnClicked += (sender, e) => 
-        {
-            dialog.Close();
-        };
+
+        cancelButton.OnClicked += (sender, e) => { dialog.Close(); };
     }
 
     private bool ValidateInputsAndCreateSubscription()
     {
-        var name = _nameEntry?.GetText();
+        var name = _nameEntry?.GetText().Trim();
         var amountText = _amountEntry?.GetText();
-        var period = _periodEntry?.GetText();
-        var purchaseDate = _purchaseDateEntry?.GetText();
-        var nextPaymentDate = _nextPaymentEntry?.GetText();
         
-        // Validate inputs
+        string? period = null;
+        if (_periodEntry is not null && _periodEntry.Model is StringList stringList)
+        {
+            period = stringList.GetString(_periodEntry.Selected);
+        }
+
+        // Validation:
         if (string.IsNullOrWhiteSpace(name))
         {
             _errorLabel?.SetLabel("Please enter a subscription name");
             _errorLabel?.SetVisible(true);
             return false;
         }
-        
+
         if (!decimal.TryParse(amountText, out decimal amount) || amount <= 0)
         {
             _errorLabel?.SetLabel("Please enter a valid amount (e.g., 9.99)");
             _errorLabel?.SetVisible(true);
             return false;
         }
-        
+
         if (string.IsNullOrWhiteSpace(period))
         {
-            _errorLabel?.SetLabel("Please enter a payment period");
+            _errorLabel?.SetLabel("Please select a payment period");
             _errorLabel?.SetVisible(true);
             return false;
         }
         
-        if (string.IsNullOrWhiteSpace(purchaseDate))
-        {
-            _errorLabel?.SetLabel("Please enter a purchase date");
-            _errorLabel?.SetVisible(true);
-            return false;
-        }
-        
-        if (string.IsNullOrWhiteSpace(nextPaymentDate))
-        {
-            _errorLabel?.SetLabel("Please enter a next payment date");
-            _errorLabel?.SetVisible(true);
-            return false;
-        }
-            
-        if (!DateTime.TryParse(purchaseDate, out _))
-        {
-            _errorLabel?.SetLabel("Purchase date must be in valid format (YYYY-MM-DD)");
-            _errorLabel?.SetVisible(true);
-            return false;
-        }
-        
-        if (!DateTime.TryParse(nextPaymentDate, out _))
-        {
-            _errorLabel?.SetLabel("Next payment date must be in valid format (YYYY-MM-DD)");
-            _errorLabel?.SetVisible(true);
-            return false;
-        }
-        
-        CreateAndAddNewSubscription(name, amount,  period, purchaseDate, nextPaymentDate);
+        // Date Calculation:
+        DateTime purchaseDate = _selectedPurchaseDate;
+        DateTime nextPaymentDate;
 
+        switch (period)
+        {
+            case "Monthly":
+                nextPaymentDate = purchaseDate.AddMonths(1);
+                break;
+            case "Yearly":
+                nextPaymentDate = purchaseDate.AddYears(1);
+                break;
+            case "Weekly":
+                nextPaymentDate = purchaseDate.AddDays(7);
+                break;
+            case "Daily":
+                nextPaymentDate = purchaseDate.AddDays(1);
+                break;
+            default:
+                _errorLabel?.SetLabel("Invalid payment period selected.");
+                _errorLabel?.SetVisible(true);
+                return false;
+        }
+        
+        var purchaseDateString = purchaseDate.ToString("yyyy-MM-dd");
+        var nextPaymentDateString = nextPaymentDate.ToString("yyyy-MM-dd");
+
+        CreateAndAddNewSubscription(name, amount, period, purchaseDateString, nextPaymentDateString);
+        
+        _errorLabel?.SetVisible(false);
         return true;
     }
 
@@ -137,11 +139,11 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
             PurchaseDate = purchaseDate,
             NextPaymentDate = nextPaymentDate
         };
-        
+
         StorageManager.Subscriptions.Add(newSubscription);
         StorageManager.SaveListToJson();
     }
-    
+
     private void AddFormFields(Box mainBox)
     {
         // Name:
@@ -151,7 +153,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         _nameEntry = Entry.New();
         _nameEntry.SetPlaceholderText("e.g., Netflix, Spotify");
         mainBox.Append(_nameEntry);
-    
+
         // Amount:
         var amountLabel = Label.New("Amount:");
         amountLabel.SetHalign(Align.Start);
@@ -159,31 +161,42 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         _amountEntry = Entry.New();
         _amountEntry.SetPlaceholderText("e.g., 9.99");
         mainBox.Append(_amountEntry);
-    
+
         // Payment Period:
         var periodLabel = Label.New("Payment Period:");
         periodLabel.SetHalign(Align.Start);
         mainBox.Append(periodLabel);
-        _periodEntry = Entry.New();
-        _periodEntry.SetPlaceholderText("e.g., Monthly, Yearly");
+        _periodEntry = DropDown.NewFromStrings(["Daily", "Weekly", "Monthly", "Yearly"]);
+        _periodEntry.SetSelected(0); // Default to "Monthly"
         mainBox.Append(_periodEntry);
-    
+
         // Purchase Date:
-        var purchaseDateLabel = Label.New("Purchase Date (YYYY-MM-DD):");
+        var purchaseDateLabel = Label.New("Purchase Date:");
         purchaseDateLabel.SetHalign(Align.Start);
         mainBox.Append(purchaseDateLabel);
-        _purchaseDateEntry = Entry.New();
-        _purchaseDateEntry.SetPlaceholderText("e.g., 2024-01-15");
-        mainBox.Append(_purchaseDateEntry);
-    
-        // Next Payment Date:
-        var nextPaymentLabel = Label.New("Next Payment Date (YYYY-MM-DD):");
-        nextPaymentLabel.SetHalign(Align.Start);
-        mainBox.Append(nextPaymentLabel);
-        _nextPaymentEntry = Entry.New();
-        _nextPaymentEntry.SetPlaceholderText("e.g., 2025-09-21");
-        mainBox.Append(_nextPaymentEntry);
-    
+
+        _purchaseDateCalendar = Calendar.New();
+        
+        _purchaseDateButton = MenuButton.New();
+        _purchaseDateButton.SetLabel(_selectedPurchaseDate.ToString("yyyy-MM-dd"));
+        mainBox.Append(_purchaseDateButton);
+
+        var purchaseDatePopover = Popover.New();
+        purchaseDatePopover.SetChild(_purchaseDateCalendar);
+        
+        if (_purchaseDateButton is not null)
+            _purchaseDateButton.Popover = purchaseDatePopover;
+
+        _purchaseDateCalendar.OnDaySelected += (sender, e) =>
+        {
+            GLib.DateTime selected = _purchaseDateCalendar.GetDate();
+            
+            _selectedPurchaseDate = new System.DateTime(selected.GetYear(), selected.GetMonth(), selected.GetDayOfMonth());
+
+            _purchaseDateButton?.SetLabel(_selectedPurchaseDate.ToString("yyyy-MM-dd"));
+            purchaseDatePopover.Hide();
+        };
+        
         // Error label:
         _errorLabel = Label.New("");
         _errorLabel.AddCssClass("error");
@@ -197,8 +210,8 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         dialog.SetTransientFor(parentWindow);
         dialog.SetModal(true);
         dialog.SetTitle("Add Subscription");
-        dialog.SetDefaultSize(400, 350);
-        
+        dialog.SetDefaultSize(400, 350); 
+
         return dialog;
     }
 
@@ -209,8 +222,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         mainBox.SetMarginBottom(12);
         mainBox.SetMarginStart(12);
         mainBox.SetMarginEnd(12);
-        
+
         return mainBox;
     }
-    
 }
