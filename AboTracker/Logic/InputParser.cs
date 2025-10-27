@@ -40,9 +40,4 @@ public static class InputParser
             return [];
         }
     }
-
-    public static string PrintSubscription(int i)
-    {
-        return Subscriptions[i].ToString();
-    }
 }
