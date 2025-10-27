@@ -25,4 +25,5 @@ public class Subscription
         // You can format this string however you like
         return $"{Name} - ${Amount} ({PaymentPeriod}) - Next Payment: {NextPaymentDate}";
     }
+    
 }

@@ -11,8 +11,8 @@ internal static class AboTracker
         var app = Gtk.Application.New("org.abo.tracker", Gio.ApplicationFlags.DefaultFlags);
         app.OnActivate += (sender, e) =>
         {
-            InputParser.InitializeArray();
-            var window = new MainWindowUi(app, InputParser.Subscriptions);
+            StorageManager.InitializeArray();
+            var window = new MainWindowUi(app, StorageManager.Subscriptions);
             window.Show();
         };
         

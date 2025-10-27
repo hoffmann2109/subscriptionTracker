@@ -109,8 +109,13 @@ public class MainWindowUi : ApplicationWindow
         // Make button clickable:
         button.OnClicked += (sender, e) => 
         {
-            // TODO: Implement delete logic
-            label.SetLabel("Abo was deleted!");
+            var success = StorageManager.RemoveSubscriptionByName(sub.Name);
+            
+            if (success)
+            {
+                label.SetLabel("Abo was deleted!");
+                StorageManager.SaveListToJson();
+            }
         };
     }
 }
