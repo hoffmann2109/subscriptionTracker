@@ -12,7 +12,6 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
     private MenuButton? _purchaseDateButton;
     private Calendar? _purchaseDateCalendar;
     private Label? _errorLabel;
-
     private DateTime _selectedPurchaseDate = DateTime.Today;
 
     public void CreateAndShowAddDialog()
@@ -82,7 +81,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
             return false;
         }
 
-        if (!decimal.TryParse(amountText, out decimal amount) || amount <= 0)
+        if (!decimal.TryParse(amountText, out var amount) || amount <= 0)
         {
             _errorLabel?.SetLabel("Please enter a valid amount (e.g., 9.99)");
             _errorLabel?.SetVisible(true);
@@ -97,7 +96,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         }
         
         // Date Calculation:
-        DateTime purchaseDate = _selectedPurchaseDate;
+        var purchaseDate = _selectedPurchaseDate;
         DateTime nextPaymentDate;
 
         switch (period)
@@ -174,7 +173,6 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         var purchaseDateLabel = Label.New("Purchase Date:");
         purchaseDateLabel.SetHalign(Align.Start);
         mainBox.Append(purchaseDateLabel);
-
         _purchaseDateCalendar = Calendar.New();
         
         _purchaseDateButton = MenuButton.New();
@@ -189,7 +187,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
 
         _purchaseDateCalendar.OnDaySelected += (sender, e) =>
         {
-            GLib.DateTime selected = _purchaseDateCalendar.GetDate();
+            var selected = _purchaseDateCalendar.GetDate();
             
             _selectedPurchaseDate = new System.DateTime(selected.GetYear(), selected.GetMonth(), selected.GetDayOfMonth());
 

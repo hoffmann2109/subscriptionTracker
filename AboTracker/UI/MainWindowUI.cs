@@ -27,7 +27,7 @@ public class MainWindowUi : ApplicationWindow
         _subscriptionListContainer = Box.New(Orientation.Vertical, 12);
         _calculationContainer = Box.New(Orientation.Vertical, 6);
         _navigationContainer = Box.New(Orientation.Vertical, 6);
-        SetupContainerStructure();
+        SetupContainerStructure(subscriptions);
         CreateElementsFromArray(subscriptions);
     }
 
@@ -39,7 +39,7 @@ public class MainWindowUi : ApplicationWindow
     }
 
     // Set layout and add all boxes to main box
-    private void SetupContainerStructure()
+    private void SetupContainerStructure(IEnumerable<Subscription> subscriptions)
     {
         SetupNavigationBar();
         
@@ -57,7 +57,7 @@ public class MainWindowUi : ApplicationWindow
         _calculationContainer.SetMarginBottom(12);
         _calculationContainer.SetMarginStart(12);
         _calculationContainer.SetMarginEnd(12);
-        _calculationContainer.Append(Label.New("Calculations are done here"));
+        _calculationContainer.Append(Label.New(" Monthly Cost: " + "$" + Math.Round(Calculator.CalculateMonthlySum(subscriptions),2)));
         _rootBox.Append(_calculationContainer);
     }
 
