@@ -33,5 +33,12 @@
     "paymentPeriod": "Monthly",
     "purchaseDate": "27.10.2025",
     "nextPaymentDate": "26.11.2025"
+  },
+  {
+    "name": "nETFLIX",
+    "amount": 9.99,
+    "paymentPeriod": "Yearly",
+    "purchaseDate": "2024-01-15",
+    "nextPaymentDate": "2024-02-16"
   }
 ]
