@@ -4,11 +4,12 @@ using Gtk;
 
 namespace AboTracker.GUI;
 
-public class MainWindowUi : Gtk.ApplicationWindow
+public class MainWindowUi : ApplicationWindow
 {
     // Boxes:
     private readonly Box _rootBox;
     private readonly Box _subscriptionListContainer;
+    private readonly Box _navigationContainer;
     private readonly Box _calculationContainer;
     
     // Main Window:
@@ -23,6 +24,7 @@ public class MainWindowUi : Gtk.ApplicationWindow
         // Further Boxes:
         _subscriptionListContainer = Box.New(Orientation.Vertical, 12);
         _calculationContainer = Box.New(Orientation.Vertical, 6);
+        _navigationContainer = Box.New(Orientation.Vertical, 6);
         SetupContainerStructure();
         CreateElementsFromArray(subscriptions);
     }
@@ -37,21 +39,28 @@ public class MainWindowUi : Gtk.ApplicationWindow
     // Set layout and add all boxes to main box
     private void SetupContainerStructure()
     {
+        _navigationContainer.SetMarginTop(12);
+        _navigationContainer.SetMarginBottom(12);
+        _navigationContainer.SetMarginStart(12);
+        _navigationContainer.SetMarginEnd(12);
+        _navigationContainer.Append(Label.New("Navigation is done here"));
+        _rootBox.Append(_navigationContainer);
+        
+        _rootBox.Append(Separator.New(Orientation.Horizontal));
+        
         _subscriptionListContainer.SetMarginTop(12);
         _subscriptionListContainer.SetMarginBottom(12);
         _subscriptionListContainer.SetMarginStart(12);
         _subscriptionListContainer.SetMarginEnd(12);
         _rootBox.Append(_subscriptionListContainer);
         
-        var separator = Separator.New(Gtk.Orientation.Horizontal);
-        _rootBox.Append(separator);
+        _rootBox.Append(Separator.New(Orientation.Horizontal));
         
         _calculationContainer.SetMarginTop(12);
         _calculationContainer.SetMarginBottom(12);
         _calculationContainer.SetMarginStart(12);
         _calculationContainer.SetMarginEnd(12);
-        var label = Label.New("Calculations are done here");
-        _calculationContainer.Append(label);
+        _calculationContainer.Append(Label.New("Calculations are done here"));
         _rootBox.Append(_calculationContainer);
     }
 
@@ -67,7 +76,7 @@ public class MainWindowUi : Gtk.ApplicationWindow
     private void AddSubscriptionComponent(Subscription sub)
     {
         // Add a box:
-        var box = Box.New(Gtk.Orientation.Vertical, 6);
+        var box = Box.New(Orientation.Vertical, 6);
         box.SetMarginTop(12);
         box.SetMarginBottom(12);
         box.SetMarginStart(12);
@@ -75,7 +84,7 @@ public class MainWindowUi : Gtk.ApplicationWindow
             
         // Add a label and a button:
         var label = Label.New(sub.ToString()); // Use the sub data directly
-        var button = Gtk.Button.NewWithLabel("Delete");
+        var button = Button.NewWithLabel("Delete");
         box.Append(label);
         box.Append(button);
         
