@@ -91,6 +91,14 @@ public class MainWindowUi : ApplicationWindow
         CreateSortingBox();
         CreateAndStyleAddButton();
 
+        var infoButton = Button.NewFromIconName("dialog-information-symbolic");
+        _navigationContainer.Append(infoButton);
+
+        infoButton.OnClicked += (sender, e) =>
+        {
+            var helpDialog = new HelpDialogUi(this);
+            helpDialog.CreateAndShowHelpDialog();
+        };
     }
 
     private void CreateAndStyleAddButton()

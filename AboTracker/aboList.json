@@ -4,63 +4,56 @@
     "amount": 15.99,
     "paymentPeriod": "Monthly",
     "purchaseDate": "2024-05-15",
-    "nextPaymentDate": "empty"
+    "nextPaymentDate": "15.11.2025"
   },
   {
     "name": "Music Service",
     "amount": 10.99,
     "paymentPeriod": "Monthly",
     "purchaseDate": "2024-01-22",
-    "nextPaymentDate": "empty"
+    "nextPaymentDate": "22.11.2025"
   },
   {
     "name": "Cloud Storage",
     "amount": 119.99,
     "paymentPeriod": "Yearly",
     "purchaseDate": "2025-03-01",
-    "nextPaymentDate": "empty"
+    "nextPaymentDate": "01.03.2026"
   },
   {
     "name": "Magazine Subscription",
     "amount": 49.50,
     "paymentPeriod": "Yearly",
     "purchaseDate": "2025-09-20",
-    "nextPaymentDate": "empty"
-  },
-  {
-    "name": "Netflix",
-    "amount": 15.99,
-    "paymentPeriod": "Quarterly",
-    "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.01.2026"
+    "nextPaymentDate": "20.09.2026"
   },
   {
     "name": "Streaming Service",
     "amount": 15.99,
     "paymentPeriod": "Monthly",
     "purchaseDate": "2024-05-15",
-    "nextPaymentDate": "empty"
+    "nextPaymentDate": "15.11.2025"
   },
   {
     "name": "Music Service",
     "amount": 10.99,
     "paymentPeriod": "Monthly",
     "purchaseDate": "2024-01-22",
-    "nextPaymentDate": "empty"
+    "nextPaymentDate": "22.11.2025"
   },
   {
     "name": "Cloud Storage",
     "amount": 119.99,
     "paymentPeriod": "Yearly",
     "purchaseDate": "2025-03-01",
-    "nextPaymentDate": "empty"
+    "nextPaymentDate": "01.03.2026"
   },
   {
     "name": "Magazine Subscription",
     "amount": 49.50,
     "paymentPeriod": "Yearly",
     "purchaseDate": "2025-09-20",
-    "nextPaymentDate": "empty"
+    "nextPaymentDate": "20.09.2026"
   },
   {
     "name": "Netflix",
@@ -68,5 +61,12 @@
     "paymentPeriod": "Quarterly",
     "purchaseDate": "27.10.2025",
     "nextPaymentDate": "27.01.2026"
+  },
+  {
+    "name": "Netflix",
+    "amount": 9.99,
+    "paymentPeriod": "Monthly",
+    "purchaseDate": "27.10.2025",
+    "nextPaymentDate": "27.11.2025"
   }
 ]
