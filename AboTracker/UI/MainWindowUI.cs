@@ -33,6 +33,8 @@ public class MainWindowUi : ApplicationWindow
         _sortComboBox = ComboBoxText.New();
         
         var enumerable = subscriptions as Subscription[] ?? subscriptions.ToArray();
+        
+        Calculator.ComputeNextPaymentDate(enumerable);
         SetupContainerStructure(enumerable);
         CreateElementsFromArray(enumerable);
     }
@@ -55,7 +57,6 @@ public class MainWindowUi : ApplicationWindow
         subscriptionScroller.SetPolicy(PolicyType.Never, PolicyType.Automatic);
         
         subscriptionScroller.SetVexpand(true);
-        
         subscriptionScroller.SetMarginTop(12);
         subscriptionScroller.SetMarginBottom(12);
         subscriptionScroller.SetMarginStart(12);
@@ -63,7 +64,6 @@ public class MainWindowUi : ApplicationWindow
         subscriptionScroller.SetChild(_subscriptionListContainer);
         
         _rootBox.Append(subscriptionScroller);
-        
         _rootBox.Append(Separator.New(Orientation.Horizontal));
         
         _calculationContainer.SetMarginTop(12);
