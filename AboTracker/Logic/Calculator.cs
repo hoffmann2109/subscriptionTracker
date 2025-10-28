@@ -20,6 +20,9 @@ public static class Calculator
                 case "Weekly":
                     totalYearly += (double)(s.Amount * 52);
                     break;
+                case "Quarterly":
+                    totalYearly += (double)(s.Amount * 4);
+                    break;
                 case "Monthly": 
                     totalYearly += (double)(s.Amount * 12);
                     break;

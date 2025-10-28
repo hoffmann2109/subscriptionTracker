@@ -107,6 +107,9 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
             case "Yearly":
                 nextPaymentDate = purchaseDate.AddYears(1);
                 break;
+            case "Quarterly":
+                nextPaymentDate = purchaseDate.AddMonths(3);
+                break;
             case "Weekly":
                 nextPaymentDate = purchaseDate.AddDays(7);
                 break;
@@ -119,8 +122,8 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
                 return false;
         }
         
-        var purchaseDateString = purchaseDate.ToString("yyyy-MM-dd");
-        var nextPaymentDateString = nextPaymentDate.ToString("yyyy-MM-dd");
+        var purchaseDateString = purchaseDate.ToString("dd.MM.yyyy");
+        var nextPaymentDateString = nextPaymentDate.ToString("dd.MM.yyyy");
 
         CreateAndAddNewSubscription(name, amount, period, purchaseDateString, nextPaymentDateString);
         
@@ -165,7 +168,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         var periodLabel = Label.New("Payment Period:");
         periodLabel.SetHalign(Align.Start);
         mainBox.Append(periodLabel);
-        _periodEntry = DropDown.NewFromStrings(["Daily", "Weekly", "Monthly", "Yearly"]);
+        _periodEntry = DropDown.NewFromStrings(["Daily", "Weekly", "Quarterly", "Monthly", "Yearly"]);
         _periodEntry.SetSelected(0); // Default to "Monthly"
         mainBox.Append(_periodEntry);
 
@@ -176,7 +179,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         _purchaseDateCalendar = Calendar.New();
         
         _purchaseDateButton = MenuButton.New();
-        _purchaseDateButton.SetLabel(_selectedPurchaseDate.ToString("yyyy-MM-dd"));
+        _purchaseDateButton.SetLabel(_selectedPurchaseDate.ToString("dd.MM.yyyy"));
         mainBox.Append(_purchaseDateButton);
 
         var purchaseDatePopover = Popover.New();
@@ -191,7 +194,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
             
             _selectedPurchaseDate = new System.DateTime(selected.GetYear(), selected.GetMonth(), selected.GetDayOfMonth());
 
-            _purchaseDateButton?.SetLabel(_selectedPurchaseDate.ToString("yyyy-MM-dd"));
+            _purchaseDateButton?.SetLabel(_selectedPurchaseDate.ToString("dd.MM.yyyy"));
             purchaseDatePopover.Hide();
         };
         
