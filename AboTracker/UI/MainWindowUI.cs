@@ -1,9 +1,9 @@
 using AboTracker.Logic;
 using AboTracker.Model;
-using Gio.Internal;
 using GLib;
 using Gtk;
 using Application = Gtk.Application;
+using DateTime = System.DateTime;
 
 namespace AboTracker.UI;
 
@@ -15,6 +15,7 @@ public class MainWindowUi : ApplicationWindow
     private readonly Box _navigationContainer;
     private readonly Box _calculationContainer;
     private readonly Label _monthlyCostLabel = Label.New("?");
+    private readonly ComboBoxText _sortComboBox;
     
     // Main Window:
     public MainWindowUi(Application app, IEnumerable<Subscription> subscriptions)
@@ -29,6 +30,7 @@ public class MainWindowUi : ApplicationWindow
         _subscriptionListContainer = Box.New(Orientation.Vertical, 12);
         _calculationContainer = Box.New(Orientation.Vertical, 6);
         _navigationContainer = Box.New(Orientation.Horizontal, 12);
+        _sortComboBox = ComboBoxText.New();
         
         var enumerable = subscriptions as Subscription[] ?? subscriptions.ToArray();
         SetupContainerStructure(enumerable);
@@ -70,7 +72,7 @@ public class MainWindowUi : ApplicationWindow
         _calculationContainer.Append(_monthlyCostLabel);
         _rootBox.Append(_calculationContainer);
     }
-
+    
     private void SetupNavigationBar()
     {
         _navigationContainer.SetMarginTop(12);
@@ -79,8 +81,7 @@ public class MainWindowUi : ApplicationWindow
         _navigationContainer.SetMarginEnd(12);
         _rootBox.Append(_navigationContainer);
         
-        var sortButton = Button.NewWithLabel("Sort");
-        _navigationContainer.Append(sortButton);
+        CreateSortingBox();
         
         var addButton = Button.NewWithLabel("Add");
         _navigationContainer.Append(addButton);
@@ -92,6 +93,22 @@ public class MainWindowUi : ApplicationWindow
         };
     }
 
+    private void CreateSortingBox()
+    {
+        // Sort ComboBox:
+        _sortComboBox.AppendText("Sort by...");
+        _sortComboBox.AppendText("Name (A-Z)");
+        _sortComboBox.AppendText("Amount (High-Low)");
+        _sortComboBox.AppendText("Amount (Low-High)");
+        _sortComboBox.AppendText("Next Payment (Soonest)");
+        _sortComboBox.AppendText("Purchase Date (Newest)");
+        _sortComboBox.AppendText("Payment Period");
+        _sortComboBox.SetHexpand(true);
+        _sortComboBox.SetActive(0);
+        _sortComboBox.OnChanged += OnSortChanged;
+        _navigationContainer.Append(_sortComboBox);
+    }
+
     // Create Boxes from Subscription Elements:
     private void CreateElementsFromArray(IEnumerable<Subscription> subscriptions)
     {   
@@ -101,10 +118,8 @@ public class MainWindowUi : ApplicationWindow
         }
     }
 
-private void AddSubscriptionComponent(Subscription sub)
+    private void AddSubscriptionComponent(Subscription sub)
     {
-        // TODO: sort by due date
-        
         // Add a box:
         var box = Box.New(Orientation.Horizontal, 6);
         box.SetMarginTop(12);
@@ -153,6 +168,52 @@ private void AddSubscriptionComponent(Subscription sub)
         };
     }
     
+    private void OnSortChanged(object? sender, EventArgs e)
+    {
+        var activeSort = _sortComboBox.GetActiveText();
+        
+        if (_sortComboBox.GetActive() == 0)
+        {
+            while (_subscriptionListContainer.GetFirstChild() is { } child)
+            {
+                _subscriptionListContainer.Remove(child);
+            }
+            CreateElementsFromArray(StorageManager.Subscriptions);
+            return;
+        }
+
+        var listToSort = StorageManager.Subscriptions;
+        IEnumerable<Subscription> sortedList;
+
+        try
+        {
+            sortedList = activeSort switch
+            {
+                "Name (A-Z)" => listToSort.OrderBy(s => s.Name),
+                "Amount (High-Low)" => listToSort.OrderByDescending(s => s.Amount),
+                "Amount (Low-High)" => listToSort.OrderBy(s => s.Amount),
+                "Next Payment (Soonest)" => listToSort.OrderBy(s => 
+                    DateTime.TryParse(s.NextPaymentDate, out var date) ? date : DateTime.MaxValue),
+                "Purchase Date (Newest)" => listToSort.OrderByDescending(s => 
+                    DateTime.TryParse(s.PurchaseDate, out var date) ? date : DateTime.MinValue),
+                "Payment Period" => listToSort.OrderBy(s => s.PaymentPeriod),
+                _ => listToSort // Default case
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error during sorting: {ex.Message}");
+            sortedList = listToSort;
+        }
+        
+        while (_subscriptionListContainer.GetFirstChild() is { } child)
+        {
+            _subscriptionListContainer.Remove(child);
+        }
+        
+        CreateElementsFromArray(sortedList);
+    }
+
     private void ReloadSubscriptionList()
     {
         while (_subscriptionListContainer.GetFirstChild() is { } child)
@@ -167,5 +228,7 @@ private void AddSubscriptionComponent(Subscription sub)
         var newSum = Math.Round(Calculator.CalculateMonthlySum(StorageManager.Subscriptions), 2);
         var newCostText = " Monthly Cost: " + "€" + newSum;
         _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(newCostText)}</big></b>");
+        
+        _sortComboBox.SetActive(0);
     }
 }
