@@ -41,7 +41,7 @@ public class MainWindowUi : ApplicationWindow
     {
         this.Application = app; 
         this.Title = "Simple Abo Tracker";
-        this.SetDefaultSize(600, 400);
+        this.SetDefaultSize(550, 650);
     }
 
     // Set layout and add all boxes to main box
@@ -82,8 +82,31 @@ public class MainWindowUi : ApplicationWindow
         _rootBox.Append(_navigationContainer);
         
         CreateSortingBox();
-        
+        CreateAndStyleAddButton();
+
+    }
+
+    private void CreateAndStyleAddButton()
+    {
         var addButton = Button.NewWithLabel("Add");
+        addButton.AddCssClass("add-button-custom");
+        string buttonCss = """
+                           .add-button-custom {
+                               background-image: none;
+                               background-color: #80B4B3;
+                               color: #313744;
+                               border-radius: 5px;
+                           }
+
+                           .add-button-custom:hover {
+                               background-color: #6DA4A3;
+                           }
+                           """;
+        
+        var cssProvider = CssProvider.New();
+        cssProvider.LoadFromData(buttonCss, -1);
+        addButton.GetStyleContext().AddProvider(cssProvider, 800);
+        
         _navigationContainer.Append(addButton);
         
         addButton.OnClicked += (sender, e) => 
