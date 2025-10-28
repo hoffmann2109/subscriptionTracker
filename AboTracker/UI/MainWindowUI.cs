@@ -28,7 +28,7 @@ public class MainWindowUi : ApplicationWindow
         // Further Boxes:
         _subscriptionListContainer = Box.New(Orientation.Vertical, 12);
         _calculationContainer = Box.New(Orientation.Vertical, 6);
-        _navigationContainer = Box.New(Orientation.Vertical, 6);
+        _navigationContainer = Box.New(Orientation.Horizontal, 12);
         
         var enumerable = subscriptions as Subscription[] ?? subscriptions.ToArray();
         SetupContainerStructure(enumerable);
@@ -79,10 +79,13 @@ public class MainWindowUi : ApplicationWindow
         _navigationContainer.SetMarginEnd(12);
         _rootBox.Append(_navigationContainer);
         
-        var button = Button.NewWithLabel("Add");
-        _navigationContainer.Append(button);
+        var sortButton = Button.NewWithLabel("Sort");
+        _navigationContainer.Append(sortButton);
         
-        button.OnClicked += (sender, e) => 
+        var addButton = Button.NewWithLabel("Add");
+        _navigationContainer.Append(addButton);
+        
+        addButton.OnClicked += (sender, e) => 
         {
             var addDialog = new AddDialogUi(this, ReloadSubscriptionList);
             addDialog.CreateAndShowAddDialog();
