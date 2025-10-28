@@ -4,20 +4,31 @@
     "amount": 15.99,
     "paymentPeriod": "Monthly",
     "purchaseDate": "2024-05-15",
-    "nextPaymentDate": "empty"
+    "nextPaymentDate": "empty",
+    "status": "cancelled"
   },
   {
     "name": "Music Service",
     "amount": 10.99,
     "paymentPeriod": "Monthly",
     "purchaseDate": "2024-01-22",
-    "nextPaymentDate": "empty"
+    "nextPaymentDate": "empty",
+    "status": "cancelled"
   },
   {
     "name": "Cloud Storage",
     "amount": 119.99,
     "paymentPeriod": "Yearly",
     "purchaseDate": "2025-03-01",
-    "nextPaymentDate": "empty"
+    "nextPaymentDate": "empty",
+    "status": "cancelled"
+  },
+  {
+    "name": "Magazine Subscription",
+    "amount": 49.50,
+    "paymentPeriod": "Yearly",
+    "purchaseDate": "2025-09-20",
+    "nextPaymentDate": "empty",
+    "status": "cancelled"
   }
 ]
