@@ -1,6 +1,7 @@
 using AboTracker.Logic;
 using AboTracker.Model;
 using Gio.Internal;
+using GLib;
 using Gtk;
 using Application = Gtk.Application;
 
@@ -13,7 +14,7 @@ public class MainWindowUi : ApplicationWindow
     private readonly Box _subscriptionListContainer;
     private readonly Box _navigationContainer;
     private readonly Box _calculationContainer;
-    private Label _monthlyCostLabel = Label.New("?");
+    private readonly Label _monthlyCostLabel = Label.New("?");
     
     // Main Window:
     public MainWindowUi(Application app, IEnumerable<Subscription> subscriptions)
@@ -60,8 +61,12 @@ public class MainWindowUi : ApplicationWindow
         _calculationContainer.SetMarginBottom(12);
         _calculationContainer.SetMarginStart(12);
         _calculationContainer.SetMarginEnd(12);
+        
         var initialSum = Math.Round(Calculator.CalculateMonthlySum(subscriptions), 2);
-        _monthlyCostLabel = Label.New(" Monthly Cost: " + "€" + initialSum);
+        var initialCostText = " Monthly Cost: " + "€" + initialSum;
+        _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(initialCostText)}</big></b>");
+        _monthlyCostLabel.SetUseMarkup(true);
+        
         _calculationContainer.Append(_monthlyCostLabel);
         _rootBox.Append(_calculationContainer);
     }
@@ -93,7 +98,7 @@ public class MainWindowUi : ApplicationWindow
         }
     }
 
-    private void AddSubscriptionComponent(Subscription sub)
+private void AddSubscriptionComponent(Subscription sub)
     {
         // TODO: sort by due date
         
@@ -103,16 +108,30 @@ public class MainWindowUi : ApplicationWindow
         box.SetMarginBottom(12);
         box.SetMarginStart(12);
         box.SetMarginEnd(12);
-            
+        
         // Add a label and a button:
-        var label = Label.New(sub.ToString());
-        label.SetHexpand(true);
-        label.SetHalign(Align.Start);
-        box.Append(label);
+        var textBox = Box.New(Orientation.Vertical, 2);
+        textBox.SetHexpand(true);
+        textBox.SetHalign(Align.Start);
+        
+        var nameLabel = Label.New(null);
+        string nameMarkup = $"<b>{Markup.EscapeText(sub.Name)}</b>";
+        nameLabel.SetMarkup(nameMarkup);
+        nameLabel.SetUseMarkup(true);
+        nameLabel.SetHalign(Align.Start);
+        
+        string detailsText = $"€{sub.Amount} ({sub.PaymentPeriod}) - Next Payment: {sub.NextPaymentDate}";
+        var detailsLabel = Label.New(detailsText);
+        detailsLabel.SetHalign(Align.Start);
+        
+        textBox.Append(nameLabel);
+        textBox.Append(detailsLabel);
+        
+        box.Append(textBox);
         
         var button = Button.NewFromIconName("user-trash-symbolic");
         button.SetTooltipText("Delete subscription");
-        button.SetHexpand(false);
+        button.SetHexpand(false); // Don't let the button expand
         box.Append(button);
         
         // Add box to Window:
@@ -143,6 +162,7 @@ public class MainWindowUi : ApplicationWindow
         CreateElementsFromArray(StorageManager.Subscriptions);
         
         var newSum = Math.Round(Calculator.CalculateMonthlySum(StorageManager.Subscriptions), 2);
-        _monthlyCostLabel.SetLabel(" Monthly Cost: " + "€" + newSum);
+        var newCostText = " Monthly Cost: " + "€" + newSum;
+        _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(newCostText)}</big></b>");
     }
 }
