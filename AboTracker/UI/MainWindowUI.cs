@@ -13,6 +13,7 @@ public class MainWindowUi : ApplicationWindow
     private readonly Box _subscriptionListContainer;
     private readonly Box _navigationContainer;
     private readonly Box _calculationContainer;
+    private Label _monthlyCostLabel;
     
     // Main Window:
     public MainWindowUi(Application app, IEnumerable<Subscription> subscriptions)
@@ -57,7 +58,9 @@ public class MainWindowUi : ApplicationWindow
         _calculationContainer.SetMarginBottom(12);
         _calculationContainer.SetMarginStart(12);
         _calculationContainer.SetMarginEnd(12);
-        _calculationContainer.Append(Label.New(" Monthly Cost: " + "$" + Math.Round(Calculator.CalculateMonthlySum(subscriptions),2)));
+        var initialSum = Math.Round(Calculator.CalculateMonthlySum(subscriptions), 2);
+        _monthlyCostLabel = Label.New(" Monthly Cost: " + "€" + initialSum);
+        _calculationContainer.Append(_monthlyCostLabel);
         _rootBox.Append(_calculationContainer);
     }
 
@@ -136,5 +139,8 @@ public class MainWindowUi : ApplicationWindow
         StorageManager.InitializeArray();
         
         CreateElementsFromArray(StorageManager.Subscriptions);
+        
+        var newSum = Math.Round(Calculator.CalculateMonthlySum(StorageManager.Subscriptions), 2);
+        _monthlyCostLabel.SetLabel(" Monthly Cost: " + "€" + newSum);
     }
 }

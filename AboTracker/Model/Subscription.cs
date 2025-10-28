@@ -23,7 +23,7 @@ public class Subscription
     public override string ToString()
     {
         // You can format this string however you like
-        return $"{Name} - ${Amount} ({PaymentPeriod}) - Next Payment: {NextPaymentDate}";
+        return $"{Name} - €{Amount} ({PaymentPeriod}) - Next Payment: {NextPaymentDate}";
     }
     
 }
