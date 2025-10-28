@@ -51,11 +51,18 @@ public class MainWindowUi : ApplicationWindow
         
         _rootBox.Append(Separator.New(Orientation.Horizontal));
         
-        _subscriptionListContainer.SetMarginTop(12);
-        _subscriptionListContainer.SetMarginBottom(12);
-        _subscriptionListContainer.SetMarginStart(12);
-        _subscriptionListContainer.SetMarginEnd(12);
-        _rootBox.Append(_subscriptionListContainer);
+        var subscriptionScroller = ScrolledWindow.New();
+        subscriptionScroller.SetPolicy(PolicyType.Never, PolicyType.Automatic);
+        
+        subscriptionScroller.SetVexpand(true);
+        
+        subscriptionScroller.SetMarginTop(12);
+        subscriptionScroller.SetMarginBottom(12);
+        subscriptionScroller.SetMarginStart(12);
+        subscriptionScroller.SetMarginEnd(12);
+        subscriptionScroller.SetChild(_subscriptionListContainer);
+        
+        _rootBox.Append(subscriptionScroller);
         
         _rootBox.Append(Separator.New(Orientation.Horizontal));
         
