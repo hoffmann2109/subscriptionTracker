@@ -13,7 +13,7 @@ public class MainWindowUi : ApplicationWindow
     private readonly Box _subscriptionListContainer;
     private readonly Box _navigationContainer;
     private readonly Box _calculationContainer;
-    private Label _monthlyCostLabel;
+    private Label _monthlyCostLabel = Label.New("?");
     
     // Main Window:
     public MainWindowUi(Application app, IEnumerable<Subscription> subscriptions)
@@ -28,8 +28,10 @@ public class MainWindowUi : ApplicationWindow
         _subscriptionListContainer = Box.New(Orientation.Vertical, 12);
         _calculationContainer = Box.New(Orientation.Vertical, 6);
         _navigationContainer = Box.New(Orientation.Vertical, 6);
-        SetupContainerStructure(subscriptions);
-        CreateElementsFromArray(subscriptions);
+        
+        var enumerable = subscriptions as Subscription[] ?? subscriptions.ToArray();
+        SetupContainerStructure(enumerable);
+        CreateElementsFromArray(enumerable);
     }
 
     private void AppUiSetup(Application app)
