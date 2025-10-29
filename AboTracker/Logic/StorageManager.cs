@@ -6,10 +6,14 @@ namespace AboTracker.Logic;
 public static class StorageManager
 {
     private static List<Subscription> _aboList = [];
-    private static readonly string JsonFilePath = "/home/thomas/RiderProjects/AboTracker/AboTracker/aboList.json"; 
+    
+    private static readonly string JsonFilePath = Path.Combine(
+        AppContext.BaseDirectory, 
+        "aboList.json"
+    );
     
     public static List<Subscription> Subscriptions => _aboList;
-
+    
     public static void InitializeArray()
     {
         // Load the data from the JSON file.

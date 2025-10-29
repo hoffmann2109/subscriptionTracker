@@ -11,4 +11,13 @@
       <PackageReference Include="GirCore.Gtk-4.0" Version="0.7.0-preview.2" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Logic\aboList.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="aboList.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
