@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AboTracker", "AboTracker\AboTracker.csproj", "{2BC82814-C7A5-43FB-A938-ACD4365AC485}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AboTracker.Tests", "AboTracker.Tests\AboTracker.Tests.csproj", "{1FADB19E-9BD4-4B90-BD17-A283A06D37A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{2BC82814-C7A5-43FB-A938-ACD4365AC485}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BC82814-C7A5-43FB-A938-ACD4365AC485}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BC82814-C7A5-43FB-A938-ACD4365AC485}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FADB19E-9BD4-4B90-BD17-A283A06D37A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FADB19E-9BD4-4B90-BD17-A283A06D37A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FADB19E-9BD4-4B90-BD17-A283A06D37A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FADB19E-9BD4-4B90-BD17-A283A06D37A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

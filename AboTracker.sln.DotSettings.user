@@ -1,0 +1,12 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/dotCover/Editor/HighlightingSourceSnapshotLocation/@EntryValue">/home/thomas/.cache/JetBrains/Rider2025.2/resharper-host/temp/Rider/vAny/CoverageData/_AboTracker.495327172/Snapshot/snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=33ca35d1_002Dd690_002D455d_002D89b1_002D55d8bd0ed4ab/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="CalculateMonthlySum_ComputesCorrectSum #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::1FADB19E-9BD4-4B90-BD17-A283A06D37A4::net9.0::AboTracker.Tests.CalculatorTests.CalculateMonthlySum_ComputesCorrectSum&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5c21bd03_002D0a43_002D445e_002D898e_002D23974109416d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="CalculateMonthlySum_ComputesCorrectSum" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::1FADB19E-9BD4-4B90-BD17-A283A06D37A4::net9.0::AboTracker.Tests.CalculatorTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
