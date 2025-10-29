@@ -134,13 +134,14 @@ public class MainWindowUi : ApplicationWindow
     private void CreateSortingBox()
     {
         // Sort ComboBox:
-        _sortComboBox.AppendText("Sort by...");
+        _sortComboBox.AppendText("Sort by... (Default: Input order)");
         _sortComboBox.AppendText("Name (A-Z)");
         _sortComboBox.AppendText("Amount (High-Low)");
         _sortComboBox.AppendText("Amount (Low-High)");
         _sortComboBox.AppendText("Next Payment (Soonest)");
         _sortComboBox.AppendText("Purchase Date (Newest)");
         _sortComboBox.AppendText("Payment Period");
+        _sortComboBox.AppendText("Category (A-Z)");
         _sortComboBox.SetHexpand(true);
         _sortComboBox.SetActive(0);
         _sortComboBox.OnChanged += OnSortChanged;
@@ -171,7 +172,7 @@ public class MainWindowUi : ApplicationWindow
         textBox.SetHalign(Align.Start);
         
         var nameLabel = Label.New(null);
-        string nameMarkup = $"<b>{Markup.EscapeText(sub.Name)}</b>";
+        string nameMarkup = $"<b>{Markup.EscapeText(sub.Name + " (" + Utility.ToUpperFirst(sub.Category) + ")")}</b>";
         nameLabel.SetMarkup(nameMarkup);
         nameLabel.SetUseMarkup(true);
         nameLabel.SetHalign(Align.Start);
@@ -235,6 +236,7 @@ public class MainWindowUi : ApplicationWindow
                 "Purchase Date (Newest)" => listToSort.OrderByDescending(s => 
                     DateTime.TryParse(s.PurchaseDate, out var date) ? date : DateTime.MinValue),
                 "Payment Period" => listToSort.OrderBy(s => s.PaymentPeriod),
+                "Category (A-Z)" => listToSort.OrderBy(s => s.Category),
                 _ => listToSort // Default case
             };
         }

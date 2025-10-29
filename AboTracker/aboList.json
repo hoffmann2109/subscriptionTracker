@@ -1,16 +1,18 @@
 [
   {
-    "name": "Netflix",
+    "name": "Sample 1",
     "amount": 15.99,
     "paymentPeriod": "Quarterly",
     "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.01.2026"
+    "nextPaymentDate": "27.01.2026",
+    "category": "entertainment"
   },
   {
-    "name": "Netflix",
+    "name": "Sample 2",
     "amount": 9.99,
     "paymentPeriod": "Monthly",
     "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.11.2025"
+    "nextPaymentDate": "27.11.2025",
+    "category": "entertainment"
   }
 ]

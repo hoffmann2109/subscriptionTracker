@@ -16,7 +16,6 @@ public static class StorageManager
     
     public static void InitializeArray()
     {
-        // Load the data from the JSON file.
         _aboList = ParseJson();
     }
 
