@@ -13,6 +13,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
     private Calendar? _purchaseDateCalendar;
     private Label? _errorLabel;
     private DateTime _selectedPurchaseDate = DateTime.Today;
+    private Entry? _categoryEntry;
 
     public void CreateAndShowAddDialog()
     {
@@ -124,14 +125,16 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         
         var purchaseDateString = purchaseDate.ToString("dd.MM.yyyy");
         var nextPaymentDateString = nextPaymentDate.ToString("dd.MM.yyyy");
+        
+        var category = _categoryEntry?.GetText().Trim();
 
-        CreateAndAddNewSubscription(name, amount, period, purchaseDateString, nextPaymentDateString);
+        CreateAndAddNewSubscription(name, amount, period, purchaseDateString, nextPaymentDateString, category);
         
         _errorLabel?.SetVisible(false);
         return true;
     }
 
-    private static void CreateAndAddNewSubscription(string name, decimal amount, string period, string purchaseDate, string nextPaymentDate)
+    private static void CreateAndAddNewSubscription(string name, decimal amount, string period, string purchaseDate, string nextPaymentDate, string category)
     {
         var newSubscription = new Subscription
         {
@@ -139,7 +142,8 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
             Amount = amount,
             PaymentPeriod = period,
             PurchaseDate = purchaseDate,
-            NextPaymentDate = nextPaymentDate
+            NextPaymentDate = nextPaymentDate,
+            Category = category
         };
 
         StorageManager.Subscriptions.Add(newSubscription);
@@ -197,6 +201,14 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
             _purchaseDateButton?.SetLabel(_selectedPurchaseDate.ToString("dd.MM.yyyy"));
             purchaseDatePopover.Hide();
         };
+        
+        // Category:
+        var categoryLabel = Label.New("Category:");
+        categoryLabel.SetHalign(Align.Start);
+        mainBox.Append(categoryLabel);
+        _categoryEntry = Entry.New();
+        _categoryEntry.SetPlaceholderText("e.g., Entertainment, News, Utility");
+        mainBox.Append(_categoryEntry);
         
         // Error label:
         _errorLabel = Label.New("");

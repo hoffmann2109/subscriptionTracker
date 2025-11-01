@@ -11,6 +11,11 @@ public abstract class Utility
     
     public static string ToUpperFirst(string str)
     {
-        return char.ToUpper(str[0]) + str[1..];
+        if (string.IsNullOrEmpty(str))
+        {
+            return string.Empty;
+        }
+        
+        return char.ToUpper(str[0]) + str.Substring(1);
     }
 }
