@@ -1,5 +1,4 @@
 using AboTracker.Model;
-using System.Collections.Generic; // Added for IEnumerable
 
 namespace AboTracker.Logic;
 
@@ -28,9 +27,6 @@ public static class Calculator
                     break;
                 case "Yearly": 
                     totalYearly += (double)s.Amount;
-                    break;
-                default: 
-                    // Unrecognized periods are ignored
                     break;
             }
         }
@@ -76,15 +72,7 @@ public static class Calculator
                         break;
                 }
             }
-            
-            if (dateNextPayment > dateToday.AddYears(90))
-            {
-                sub.NextPaymentDate = "N/A";
-            }
-            else
-            {
-                sub.NextPaymentDate = dateNextPayment.ToString("dd.MM.yyyy");
-            }
+            sub.NextPaymentDate = dateNextPayment > dateToday.AddYears(90)?"N/A":dateNextPayment.ToString("dd.MM.yyyy");
         }
     }
 }

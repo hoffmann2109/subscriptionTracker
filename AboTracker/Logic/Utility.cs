@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace AboTracker.Logic;
 
 public abstract class Utility
