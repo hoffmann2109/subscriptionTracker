@@ -127,9 +127,9 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         var nextPaymentDateString = nextPaymentDate.ToString("dd.MM.yyyy");
         
         var category = _categoryEntry?.GetText().Trim();
-
-        CreateAndAddNewSubscription(name, amount, period, purchaseDateString, nextPaymentDateString, category);
         
+        CreateAndAddNewSubscription(name, amount, period, purchaseDateString, nextPaymentDateString, category);
+
         _errorLabel?.SetVisible(false);
         return true;
     }

@@ -186,24 +186,30 @@ public class MainWindowUi : ApplicationWindow
         
         box.Append(textBox);
         
-        var button = Button.NewFromIconName("user-trash-symbolic");
-        button.SetTooltipText("Delete subscription");
-        button.SetHexpand(false); // Don't let the button expand
-        box.Append(button);
+        var deleteButton = Button.NewFromIconName("user-trash-symbolic");
+        deleteButton.SetTooltipText("Delete subscription");
+        deleteButton.SetHexpand(false);
+        box.Append(deleteButton);
         
         // Add box to Window:
         _subscriptionListContainer.Append(box);
         
         // Make button clickable:
-        button.OnClicked += (sender, e) => 
+        deleteButton.OnClicked += (sender, e) => 
         {
-            var success = StorageManager.RemoveSubscriptionByName(sub.Name);
-            
-            if (success)
+            Action removeAndReloadAction = () =>
             {
-                StorageManager.SaveListToJson();
-                ReloadSubscriptionList();
-            }
+                var success = StorageManager.RemoveSubscriptionByName(sub.Name);
+        
+                if (success)
+                {
+                    StorageManager.SaveListToJson();
+                    ReloadSubscriptionList();
+                }
+            };
+            
+            var removeDialog = new RemoveDialogUi(this, removeAndReloadAction, sub);
+            removeDialog.CreateAndShowRemoveDialog();
         };
     }
     
