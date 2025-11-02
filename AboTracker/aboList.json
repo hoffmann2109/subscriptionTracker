@@ -1,66 +1,66 @@
 [
   {
-    "name": "Sample 1",
-    "amount": 15.99,
-    "paymentPeriod": "Quarterly",
-    "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.01.2026",
+    "name": "StreamWave Plus",
+    "amount": 14.99,
+    "paymentPeriod": "Monthly",
+    "purchaseDate": "15.10.2025",
+    "nextPaymentDate": "15.11.2025",
     "category": "entertainment"
   },
   {
-    "name": "Sample 2",
+    "name": "CodeSphere Pro",
+    "amount": 29.99,
+    "paymentPeriod": "Monthly",
+    "purchaseDate": "01.11.2025",
+    "nextPaymentDate": "01.12.2025",
+    "category": "productivity"
+  },
+  {
+    "name": "FitTrack Elite",
+    "amount": 79.99,
+    "paymentPeriod": "Yearly",
+    "purchaseDate": "20.01.2025",
+    "nextPaymentDate": "20.01.2026",
+    "category": "fitness"
+  },
+  {
+    "name": "AudioVerse Max",
     "amount": 9.99,
     "paymentPeriod": "Monthly",
-    "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.11.2025",
-    "category": "entertainment"
+    "purchaseDate": "05.10.2025",
+    "nextPaymentDate": "05.11.2025",
+    "category": "music"
   },
   {
-    "name": "Sample 1",
-    "amount": 15.99,
-    "paymentPeriod": "Quarterly",
-    "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.01.2026",
-    "category": "entertainment"
-  },
-  {
-    "name": "Sample 2",
-    "amount": 9.99,
+    "name": "CloudVault Storage",
+    "amount": 4.99,
     "paymentPeriod": "Monthly",
-    "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.11.2025",
-    "category": "entertainment"
+    "purchaseDate": "10.10.2025",
+    "nextPaymentDate": "10.11.2025",
+    "category": "utilities"
   },
   {
-    "name": "Sample 1",
-    "amount": 15.99,
+    "name": "Global News Daily",
+    "amount": 24.00,
     "paymentPeriod": "Quarterly",
-    "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.01.2026",
-    "category": "entertainment"
+    "purchaseDate": "01.11.2025",
+    "nextPaymentDate": "01.02.2026",
+    "category": "news"
   },
   {
-    "name": "Sample 2",
-    "amount": 9.99,
+    "name": "Gamer's Grid",
+    "amount": 59.99,
+    "paymentPeriod": "Yearly",
+    "purchaseDate": "15.03.2025",
+    "nextPaymentDate": "15.03.2026",
+    "category": "gaming"
+  },
+  {
+    "name": "Creative Studio Lite",
+    "amount": 19.99,
     "paymentPeriod": "Monthly",
-    "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.11.2025",
-    "category": "entertainment"
-  },
-  {
-    "name": "Sample 1",
-    "amount": 15.99,
-    "paymentPeriod": "Quarterly",
-    "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.01.2026",
-    "category": "entertainment"
-  },
-  {
-    "name": "Sample 2",
-    "amount": 9.99,
-    "paymentPeriod": "Monthly",
-    "purchaseDate": "27.10.2025",
-    "nextPaymentDate": "27.11.2025",
-    "category": "entertainment"
+    "purchaseDate": "28.10.2025",
+    "nextPaymentDate": "28.11.2025",
+    "category": "productivity"
   }
 ]
