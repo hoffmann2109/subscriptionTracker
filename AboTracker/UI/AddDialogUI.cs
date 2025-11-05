@@ -162,31 +162,35 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         
         // Date Calculation:
         var purchaseDate = _selectedPurchaseDate;
-        DateTime nextPaymentDate;
+        var dateToday = DateTime.Now.Date;
+        DateTime nextPaymentDate = purchaseDate;
 
-        switch (period)
+        while (nextPaymentDate < dateToday)
         {
-            case "Monthly":
-                nextPaymentDate = purchaseDate.AddMonths(1);
-                break;
-            case "Yearly":
-                nextPaymentDate = purchaseDate.AddYears(1);
-                break;
-            case "Quarterly":
-                nextPaymentDate = purchaseDate.AddMonths(3);
-                break;
-            case "Weekly":
-                nextPaymentDate = purchaseDate.AddDays(7);
-                break;
-            case "Daily":
-                nextPaymentDate = purchaseDate.AddDays(1);
-                break;
-            default:
-                _errorLabel?.SetLabel("Invalid payment period selected.");
-                _errorLabel?.SetVisible(true);
-                return false;
+            switch (period)
+            {
+                case "Monthly":
+                    nextPaymentDate = purchaseDate.AddMonths(1);
+                    break;
+                case "Yearly":
+                    nextPaymentDate = purchaseDate.AddYears(1);
+                    break;
+                case "Quarterly":
+                    nextPaymentDate = purchaseDate.AddMonths(3);
+                    break;
+                case "Weekly":
+                    nextPaymentDate = purchaseDate.AddDays(7);
+                    break;
+                case "Daily":
+                    nextPaymentDate = purchaseDate.AddDays(1);
+                    break;
+                default:
+                    _errorLabel?.SetLabel("Invalid payment period selected.");
+                    _errorLabel?.SetVisible(true);
+                    return false;
+            }
         }
-        
+
         var purchaseDateString = purchaseDate.ToString("dd.MM.yyyy");
         var nextPaymentDateString = nextPaymentDate.ToString("dd.MM.yyyy");
         
