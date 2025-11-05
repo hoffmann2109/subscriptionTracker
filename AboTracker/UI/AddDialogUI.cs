@@ -170,19 +170,19 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
             switch (period)
             {
                 case "Monthly":
-                    nextPaymentDate = purchaseDate.AddMonths(1);
+                    nextPaymentDate = nextPaymentDate.AddMonths(1);
                     break;
                 case "Yearly":
-                    nextPaymentDate = purchaseDate.AddYears(1);
+                    nextPaymentDate = nextPaymentDate.AddYears(1);
                     break;
                 case "Quarterly":
-                    nextPaymentDate = purchaseDate.AddMonths(3);
+                    nextPaymentDate = nextPaymentDate.AddMonths(3);
                     break;
                 case "Weekly":
-                    nextPaymentDate = purchaseDate.AddDays(7);
+                    nextPaymentDate = nextPaymentDate.AddDays(7);
                     break;
                 case "Daily":
-                    nextPaymentDate = purchaseDate.AddDays(1);
+                    nextPaymentDate = nextPaymentDate.AddDays(1);
                     break;
                 default:
                     _errorLabel?.SetLabel("Invalid payment period selected.");
