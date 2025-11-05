@@ -191,6 +191,11 @@ public class MainWindowUi : ApplicationWindow
         deleteButton.SetHexpand(false);
         box.Append(deleteButton);
         
+        var editButton = Button.NewFromIconName("edit-symbolic");
+        editButton.SetTooltipText("Edit subscription");
+        editButton.SetHexpand(false);
+        box.Append(editButton);
+        
         // Add box to Window:
         _subscriptionListContainer.Append(box);
         
@@ -210,6 +215,12 @@ public class MainWindowUi : ApplicationWindow
             
             var removeDialog = new RemoveDialogUi(this, removeAndReloadAction, sub);
             removeDialog.CreateAndShowRemoveDialog();
+        };
+        
+        editButton.OnClicked +=  (sender, e) =>
+        {
+            var editDialog = new AddDialogUi(this, ReloadSubscriptionList);
+            editDialog.CreateAndShowEditDialog(sub);
         };
     }
     

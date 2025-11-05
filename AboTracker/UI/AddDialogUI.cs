@@ -1,6 +1,8 @@
+using System.Globalization;
 using AboTracker.Logic;
 using AboTracker.Model;
 using Gtk;
+using Calendar = Gtk.Calendar;
 
 namespace AboTracker.UI;
 
@@ -14,6 +16,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
     private Label? _errorLabel;
     private DateTime _selectedPurchaseDate = DateTime.Today;
     private Entry? _categoryEntry;
+    private string[] _periods = ["Daily", "Weekly", "Quarterly", "Monthly", "Yearly"];
 
     public void CreateAndShowAddDialog()
     {
@@ -37,6 +40,55 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         dialog.Show();
     }
 
+    public void CreateAndShowEditDialog(Subscription sub)
+    {
+        var dialog = WindowSetup();
+
+        var mainBox = AddMainBox();
+        dialog.SetChild(mainBox);
+
+        AddFormFields(mainBox);
+        
+        // Button box
+        var buttonBox = Box.New(Orientation.Horizontal, 6);
+        buttonBox.SetHalign(Align.End);
+        buttonBox.SetMarginTop(12);
+        mainBox.Append(buttonBox);
+
+        AddCancelButton(buttonBox, dialog);
+
+        InsertEditButton(buttonBox, dialog);
+
+        SetFormFieldText(sub);
+        dialog.Show();
+    }
+
+    private void SetFormFieldText(Subscription sub)
+    {
+        _nameEntry?.SetText(sub.Name);
+        _amountEntry?.SetText(sub.Amount.ToString(CultureInfo.InvariantCulture));
+        _categoryEntry?.SetText(sub.Category);
+        
+        // Set period:
+        int periodIndex = Array.IndexOf(_periods, sub.PaymentPeriod);
+        
+        if (periodIndex == -1)
+        {
+            periodIndex = 0; 
+        }
+        _periodEntry?.SetSelected((uint)periodIndex);
+
+        // Set Purchase Date:
+        if (DateTime.TryParseExact(sub.PurchaseDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var purchaseDate))
+        {
+            _selectedPurchaseDate = purchaseDate;
+            _purchaseDateButton?.SetLabel(_selectedPurchaseDate.ToString("dd.MM.yyyy"));
+            
+            var gDateTime = GLib.DateTime.NewLocal(purchaseDate.Year, purchaseDate.Month, purchaseDate.Day, 0, 0, 0);
+            if (gDateTime != null) _purchaseDateCalendar?.SelectDay(gDateTime);
+        }
+    }
+
     private void InsertAddButton(Box buttonBox, Window dialog)
     {
         var addButton = Button.NewWithLabel("Add Subscription");
@@ -52,6 +104,18 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
                 onSubscriptionAdded?.Invoke();
                 dialog.Close();
             }
+        };
+    }
+
+    private void InsertEditButton(Box buttonBox, Window dialog)
+    {
+        var editButton = Button.NewWithLabel("Edit Subscription");
+        editButton.AddCssClass("suggested-action");
+        buttonBox.Append(editButton);
+
+        editButton.OnClicked += (sender, e) =>
+        {
+
         };
     }
 
@@ -172,7 +236,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         var periodLabel = Label.New("Payment Period:");
         periodLabel.SetHalign(Align.Start);
         mainBox.Append(periodLabel);
-        _periodEntry = DropDown.NewFromStrings(["Daily", "Weekly", "Quarterly", "Monthly", "Yearly"]);
+        _periodEntry = DropDown.NewFromStrings(_periods);
         _periodEntry.SetSelected(0); // Default to "Monthly"
         mainBox.Append(_periodEntry);
 
