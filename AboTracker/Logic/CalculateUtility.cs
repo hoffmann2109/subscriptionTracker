@@ -75,4 +75,61 @@ public static class CalculateUtility
             sub.NextPaymentDate = dateNextPayment > dateToday.AddYears(90)?"N/A":dateNextPayment.ToString("dd.MM.yyyy");
         }
     }
+
+    public static IEnumerable<Subscription> SortList(IEnumerable<Subscription> listToSort, string? activeSort)
+    {
+        IEnumerable<Subscription> sortedList;
+
+        var toSort = listToSort as Subscription[] ?? listToSort.ToArray();
+        try
+        {
+            sortedList = activeSort switch
+            {
+                "Name (A-Z)" => toSort.OrderBy(s => s.Name),
+                "Amount (High-Low)" => toSort.OrderByDescending(s => (s.Amount * GetMultiplier(s))),
+                "Amount (Low-High)" => toSort.OrderBy(s => (s.Amount* GetMultiplier(s))),
+                "Next Payment (Soonest)" => toSort.OrderBy(s => 
+                    DateTime.TryParse(s.NextPaymentDate, out var date) ? date : DateTime.MaxValue),
+                "Purchase Date (Newest)" => toSort.OrderByDescending(s => 
+                    DateTime.TryParse(s.PurchaseDate, out var date) ? date : DateTime.MinValue),
+                "Payment Period" => toSort.OrderBy(s => s.PaymentPeriod),
+                "Category (A-Z)" => toSort.OrderBy(s => s.Category),
+                _ => toSort // Default case
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error during sorting: {ex.Message}");
+            sortedList = toSort;
+        }
+
+        return sortedList;
+    }
+
+    private static int GetMultiplier(Subscription sub)
+    {
+        var multiplier = 1;
+        
+        switch (sub.PaymentPeriod)
+        {
+            case "Daily":
+                multiplier = 365;
+                break;
+            case "Weekly":
+                multiplier = 52;
+
+                break;
+            case "Monthly":
+                multiplier = 12;
+                break;
+            case "Quarterly":
+                multiplier = 4;
+                break;
+            default:
+                multiplier = 1;
+                break;
+        }
+
+        return multiplier;
+    }
 }
