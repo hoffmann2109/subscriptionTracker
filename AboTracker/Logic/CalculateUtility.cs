@@ -2,7 +2,7 @@ using AboTracker.Model;
 
 namespace AboTracker.Logic;
 
-public static class Calculator
+public static class CalculateUtility
 {
     
     public static double CalculateMonthlySum(IEnumerable<Subscription> subscriptions)

@@ -5,27 +5,28 @@ namespace AboTracker.Logic;
 
 public static class StorageManager
 {
-    private static List<Subscription> _aboList = [];
-    
+
+    private static JsonSerializerOptions? _options;
+        
     private static readonly string JsonFilePath = Path.Combine(
         AppContext.BaseDirectory, 
         "aboList.json"
     );
     
-    public static List<Subscription> Subscriptions => _aboList;
-    
+    public static List<Subscription> Subscriptions { get; private set; } = [];
+
     public static void InitializeArray()
     {
-        _aboList = ParseJson();
+        Subscriptions = ParseJson();
     }
 
     private static List<Subscription> ParseJson() 
     {
-        _aboList = [];
+        Subscriptions = [];
         
         try
         {
-            string jsonString = File.ReadAllText(JsonFilePath);
+            var jsonString = File.ReadAllText(JsonFilePath);
             
             // Deserialize the JSON into the Array
             var subscriptions = JsonSerializer.Deserialize<List<Subscription>>(jsonString);
@@ -45,12 +46,12 @@ public static class StorageManager
     {
         try
         {
-            var options = new JsonSerializerOptions
+            _options = new JsonSerializerOptions
             {
                 WriteIndented = true
             };
             
-            string jsonString = JsonSerializer.Serialize(_aboList, options);
+            var jsonString = JsonSerializer.Serialize(Subscriptions, _options);
             
             File.WriteAllText(JsonFilePath, jsonString);
         }
@@ -62,15 +63,13 @@ public static class StorageManager
     
     public static bool RemoveSubscriptionByName(string name)
     {
-        var subscriptionToRemove = _aboList.FirstOrDefault(sub => sub.Name == name);
-        
-        if (subscriptionToRemove != null)
-        {
-            _aboList.Remove(subscriptionToRemove);
-            SaveListToJson();
-            return true;
-        }
+        var subscriptionToRemove = Subscriptions.FirstOrDefault(sub => sub.Name == name);
 
-        return false;
+        if (subscriptionToRemove == null) return false;
+        
+        Subscriptions.Remove(subscriptionToRemove);
+        SaveListToJson();
+        return true;
+
     }
 }

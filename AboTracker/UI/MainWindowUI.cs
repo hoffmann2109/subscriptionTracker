@@ -34,7 +34,7 @@ public class MainWindowUi : ApplicationWindow
         
         var enumerable = subscriptions as Subscription[] ?? subscriptions.ToArray();
         
-        Calculator.ComputeNextPaymentDate(enumerable);
+        CalculateUtility.ComputeNextPaymentDate(enumerable);
         SetupContainerStructure(enumerable);
         CreateElementsFromArray(enumerable);
     }
@@ -71,7 +71,7 @@ public class MainWindowUi : ApplicationWindow
         _calculationContainer.SetMarginStart(12);
         _calculationContainer.SetMarginEnd(12);
         
-        var initialSum = Math.Round(Calculator.CalculateMonthlySum(subscriptions), 2);
+        var initialSum = Math.Round(CalculateUtility.CalculateMonthlySum(subscriptions), 2);
         var initialCostText = " Monthly Cost: " + "€" + initialSum;
         _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(initialCostText)}</big></b>");
         _monthlyCostLabel.SetUseMarkup(true);
@@ -172,7 +172,7 @@ public class MainWindowUi : ApplicationWindow
         textBox.SetHalign(Align.Start);
         
         var nameLabel = Label.New(null);
-        string nameMarkup = $"<b>{Markup.EscapeText(sub.Name + " (" + Utility.ToUpperFirst(sub.Category) + ")")}</b>";
+        string nameMarkup = $"<b>{Markup.EscapeText(sub.Name + " (" + GeneralUtility.ToUpperFirst(sub.Category) + ")")}</b>";
         nameLabel.SetMarkup(nameMarkup);
         nameLabel.SetUseMarkup(true);
         nameLabel.SetHalign(Align.Start);
@@ -282,7 +282,7 @@ public class MainWindowUi : ApplicationWindow
         
         CreateElementsFromArray(StorageManager.Subscriptions);
         
-        var newSum = Math.Round(Calculator.CalculateMonthlySum(StorageManager.Subscriptions), 2);
+        var newSum = Math.Round(CalculateUtility.CalculateMonthlySum(StorageManager.Subscriptions), 2);
         var newCostText = " Monthly Cost: " + "€" + newSum;
         _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(newCostText)}</big></b>");
         

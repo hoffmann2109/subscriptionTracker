@@ -1,10 +1,10 @@
 namespace AboTracker.Logic;
 
-public abstract class Utility
+public abstract class GeneralUtility
 {
     public static void ExportToCsv()
     {
-        
+        // TODO: Implement
     }
     
     public static string ToUpperFirst(string str)
@@ -14,6 +14,6 @@ public abstract class Utility
             return string.Empty;
         }
         
-        return char.ToUpper(str[0]) + str.Substring(1);
+        return char.ToUpper(str[0]) + str[1..];
     }
 }

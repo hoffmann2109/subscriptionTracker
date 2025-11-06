@@ -4,11 +4,11 @@ using Xunit;
 
 namespace AboTracker.Tests
 {
-    public class CalculatorTests
+    public class CalculateUtilityTests
     {
         private readonly List<Subscription> _aboList = [];
 
-        public CalculatorTests()
+        public CalculateUtilityTests()
         {
             var sub1 = new Subscription{
                 Name = "Test 1", 
@@ -66,7 +66,7 @@ namespace AboTracker.Tests
         [Fact]
         public void CalculateMonthlySum_ComputesCorrectSum()
         {
-            Assert.Equal(76.75,Calculator.CalculateMonthlySum(_aboList));
+            Assert.Equal(76.75,CalculateUtility.CalculateMonthlySum(_aboList));
         }
         
     }
