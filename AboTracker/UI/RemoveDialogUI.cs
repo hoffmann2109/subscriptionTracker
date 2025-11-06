@@ -59,7 +59,7 @@ public class RemoveDialogUi(Window parentWindow, Action onSubscriptionRemoved, S
         return dialog;
     }
     
-    private Box AddMainBox()
+    private static Box AddMainBox()
     {
         var mainBox = Box.New(Orientation.Vertical, 12);
         mainBox.SetMarginTop(12);
@@ -81,7 +81,5 @@ public class RemoveDialogUi(Window parentWindow, Action onSubscriptionRemoved, S
             dialog.Close();
         };
     }
-    
-    
     
 }

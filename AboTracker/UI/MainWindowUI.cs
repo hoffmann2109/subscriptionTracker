@@ -239,29 +239,7 @@ public class MainWindowUi : ApplicationWindow
         }
 
         var listToSort = StorageManager.Subscriptions;
-        IEnumerable<Subscription> sortedList;
-
-        try
-        {
-            sortedList = activeSort switch
-            {
-                "Name (A-Z)" => listToSort.OrderBy(s => s.Name),
-                "Amount (High-Low)" => listToSort.OrderByDescending(s => s.Amount),
-                "Amount (Low-High)" => listToSort.OrderBy(s => s.Amount),
-                "Next Payment (Soonest)" => listToSort.OrderBy(s => 
-                    DateTime.TryParse(s.NextPaymentDate, out var date) ? date : DateTime.MaxValue),
-                "Purchase Date (Newest)" => listToSort.OrderByDescending(s => 
-                    DateTime.TryParse(s.PurchaseDate, out var date) ? date : DateTime.MinValue),
-                "Payment Period" => listToSort.OrderBy(s => s.PaymentPeriod),
-                "Category (A-Z)" => listToSort.OrderBy(s => s.Category),
-                _ => listToSort // Default case
-            };
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error during sorting: {ex.Message}");
-            sortedList = listToSort;
-        }
+        var sortedList = CalculateUtility.SortList(listToSort, activeSort);
         
         while (_subscriptionListContainer.GetFirstChild() is { } child)
         {
