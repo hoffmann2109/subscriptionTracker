@@ -16,7 +16,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
     private Label? _errorLabel;
     private DateTime _selectedPurchaseDate = DateTime.Today;
     private Entry? _categoryEntry;
-    private string[] _periods = ["Daily", "Weekly", "Quarterly", "Monthly", "Yearly"];
+    private readonly string[] _periods = ["Daily", "Weekly", "Quarterly", "Monthly", "Yearly"];
 
     public void CreateAndShowAddDialog()
     {
@@ -57,9 +57,10 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
 
         AddCancelButton(buttonBox, dialog);
 
-        InsertEditButton(buttonBox, dialog);
+        InsertEditButton(buttonBox, dialog, sub);
 
         SetFormFieldText(sub);
+        
         dialog.Show();
     }
 
@@ -107,7 +108,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         };
     }
 
-    private void InsertEditButton(Box buttonBox, Window dialog)
+    private void InsertEditButton(Box buttonBox, Window dialog, Subscription sub)
     {
         var editButton = Button.NewWithLabel("Edit Subscription");
         editButton.AddCssClass("suggested-action");
@@ -115,7 +116,28 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
 
         editButton.OnClicked += (sender, e) =>
         {
+            // Validate the inputs from the form:
+            var updatedData = ValidateAndExtractData();
 
+            // If validation fails: error label
+            if (updatedData == null)
+            {
+                return;
+            }
+            
+            sub.Name = updatedData.Name;
+            sub.Amount = updatedData.Amount;
+            sub.PaymentPeriod = updatedData.PaymentPeriod;
+            sub.PurchaseDate = updatedData.PurchaseDate;
+            sub.NextPaymentDate = updatedData.NextPaymentDate;
+            sub.Category = updatedData.Category;
+
+            // Save the changes
+            StorageManager.SaveListToJson();
+            
+            onSubscriptionAdded?.Invoke();
+            
+            dialog.Close();
         };
     }
 
@@ -126,8 +148,8 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
 
         cancelButton.OnClicked += (sender, e) => { dialog.Close(); };
     }
-
-    private bool ValidateInputsAndCreateSubscription()
+    
+    private Subscription? ValidateAndExtractData()
     {
         var name = _nameEntry?.GetText().Trim();
         var amountText = _amountEntry?.GetText();
@@ -143,21 +165,21 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         {
             _errorLabel?.SetLabel("Please enter a subscription name");
             _errorLabel?.SetVisible(true);
-            return false;
+            return null;
         }
 
         if (!decimal.TryParse(amountText, out var amount) || amount <= 0)
         {
             _errorLabel?.SetLabel("Please enter a valid amount (e.g., 9.99)");
             _errorLabel?.SetVisible(true);
-            return false;
+            return null;
         }
 
         if (string.IsNullOrWhiteSpace(period))
         {
             _errorLabel?.SetLabel("Please select a payment period");
             _errorLabel?.SetVisible(true);
-            return false;
+            return null;
         }
         
         // Date Calculation:
@@ -187,7 +209,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
                 default:
                     _errorLabel?.SetLabel("Invalid payment period selected.");
                     _errorLabel?.SetVisible(true);
-                    return false;
+                    return null;
             }
         }
 
@@ -196,9 +218,32 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         
         var category = _categoryEntry?.GetText().Trim();
         
-        CreateAndAddNewSubscription(name, amount, period, purchaseDateString, nextPaymentDateString, category);
-
         _errorLabel?.SetVisible(false);
+
+        // Return a new subscription object:
+        return new Subscription
+        {
+            Name = name,
+            Amount = amount,
+            PaymentPeriod = period,
+            PurchaseDate = purchaseDateString,
+            NextPaymentDate = nextPaymentDateString,
+            Category = category
+        };
+    }
+
+    private bool ValidateInputsAndCreateSubscription()
+    {
+        var newSubData = ValidateAndExtractData();
+        if (newSubData == null)
+        {
+            return false; // Validation failed
+        }
+        
+        // Validation was successful
+        CreateAndAddNewSubscription(newSubData.Name, newSubData.Amount, newSubData.PaymentPeriod, 
+            newSubData.PurchaseDate, newSubData.NextPaymentDate, newSubData.Category);
+        
         return true;
     }
 
