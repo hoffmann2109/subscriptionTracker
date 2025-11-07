@@ -16,6 +16,7 @@ public class MainWindowUi : ApplicationWindow
     private readonly Label _monthlyCostLabel = Label.New("?");
     private readonly ComboBoxText _sortComboBox;
     private readonly SearchEntry _searchEntry;
+    public string Currency;
     
     // Main Window:
     public MainWindowUi(Application app, IEnumerable<Subscription> subscriptions)
@@ -46,6 +47,7 @@ public class MainWindowUi : ApplicationWindow
         this.Title = "Simple Abo Tracker";
         this.SetDefaultSize(550, 650);
         StyleManager.LoadGlobalCss(this.GetDisplay());
+        Currency = GeneralUtility.GetCurrencySymbol();
     }
 
     // Set layout and add all boxes to main box
@@ -76,7 +78,7 @@ public class MainWindowUi : ApplicationWindow
         _calculationContainer.SetMarginEnd(12);
         
         var initialSum = Math.Round(CalculateUtility.CalculateTotalMonthlySum(subscriptions), 2);
-        var initialCostText = "Average Monthly Sum: " + "€" + initialSum;
+        var initialCostText = "Average Monthly Sum: " + Currency + initialSum;
         _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(initialCostText)}</big></b>");
         _monthlyCostLabel.SetUseMarkup(true);
         
@@ -223,7 +225,7 @@ public class MainWindowUi : ApplicationWindow
         nameLabel.SetUseMarkup(true);
         nameLabel.SetHalign(Align.Start);
         
-        string detailsText = $"€{CalculateUtility.CalculateMonthlySum(sub)} per month, Paid: ({sub.PaymentPeriod}) - Due: {sub.NextPaymentDate}";
+        string detailsText = $"{Currency}{CalculateUtility.CalculateMonthlySum(sub)} per month, Paid: ({sub.PaymentPeriod}) - Due: {sub.NextPaymentDate}";
         var detailsLabel = Label.New(detailsText);
         detailsLabel.SetHalign(Align.Start);
         
@@ -288,7 +290,7 @@ public class MainWindowUi : ApplicationWindow
         
         // Update the total sum:
         var newSum = Math.Round(CalculateUtility.CalculateTotalMonthlySum(StorageManager.Subscriptions), 2);
-        var newCostText = "Average Monthly Sum: " + "€" + newSum;
+        var newCostText = "Average Monthly Sum: " + Currency + newSum;
         _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(newCostText)}</big></b>");
     }
 }

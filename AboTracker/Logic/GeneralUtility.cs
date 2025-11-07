@@ -1,3 +1,5 @@
+using System.Globalization;
+    
 namespace AboTracker.Logic;
 
 public abstract class GeneralUtility
@@ -15,5 +17,12 @@ public abstract class GeneralUtility
         }
         
         return char.ToUpper(str[0]) + str[1..];
+    }
+
+    public static string GetCurrencySymbol()
+    {
+        var region = RegionInfo.CurrentRegion;
+        string symbol = region.CurrencySymbol;
+        return symbol;
     }
 }
