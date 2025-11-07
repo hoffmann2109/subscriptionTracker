@@ -45,6 +45,12 @@ public static class StyleManager
                            .category-sports {
                                background-color: #F5C518; /* Yellow */
                            }
+                           .subscription-entry {
+                               background-color: #383F4E;
+                               border: 1px solid #4C566A;
+                               border-radius: 6px;
+                               padding: 10px;
+                           }
                            """;
         
         cssProvider.LoadFromData(allAppCss, -1);

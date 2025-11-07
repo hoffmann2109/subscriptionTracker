@@ -64,6 +64,7 @@ public class MainWindowUi : ApplicationWindow
         subscriptionScroller.SetMarginStart(12);
         subscriptionScroller.SetMarginEnd(12);
         _subscriptionListContainer.SetValign(Align.Start);
+        _subscriptionListContainer.SetMarginEnd(20);
         subscriptionScroller.SetChild(_subscriptionListContainer);
         
         _rootBox.Append(subscriptionScroller);
@@ -190,10 +191,7 @@ public class MainWindowUi : ApplicationWindow
     {
         // Add a box:
         var box = Box.New(Orientation.Horizontal, 6);
-        box.SetMarginTop(12);
-        box.SetMarginBottom(12);
-        box.SetMarginStart(12);
-        box.SetMarginEnd(12);
+        box.AddCssClass("subscription-entry");
         
         var categoryIndicator = Box.New(Orientation.Vertical, 0);
         categoryIndicator.SetVexpand(true);
