@@ -108,7 +108,7 @@ public class MainWindowUi : ApplicationWindow
         _calculationContainer.SetMarginStart(12);
         _calculationContainer.SetMarginEnd(12);
         
-        var initialSum = Math.Round(CalculateUtility.CalculateMonthlySum(subscriptions), 2);
+        var initialSum = Math.Round(CalculateUtility.CalculateTotalMonthlySum(subscriptions), 2);
         var initialCostText = "Average Monthly Sum: " + "€" + initialSum;
         _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(initialCostText)}</big></b>");
         _monthlyCostLabel.SetUseMarkup(true);
@@ -233,7 +233,7 @@ public class MainWindowUi : ApplicationWindow
         nameLabel.SetUseMarkup(true);
         nameLabel.SetHalign(Align.Start);
         
-        string detailsText = $"€{sub.Amount} ({sub.PaymentPeriod}) - Next Payment: {sub.NextPaymentDate}";
+        string detailsText = $"€{CalculateUtility.CalculateMonthlySum(sub)} per month, Paid: ({sub.PaymentPeriod}) - Due: {sub.NextPaymentDate}";
         var detailsLabel = Label.New(detailsText);
         detailsLabel.SetHalign(Align.Start);
         
@@ -316,7 +316,7 @@ public class MainWindowUi : ApplicationWindow
         
         CreateElementsFromArray(StorageManager.Subscriptions);
         
-        var newSum = Math.Round(CalculateUtility.CalculateMonthlySum(StorageManager.Subscriptions), 2);
+        var newSum = Math.Round(CalculateUtility.CalculateTotalMonthlySum(StorageManager.Subscriptions), 2);
         var newCostText = "Average Monthly Sum: " + "€" + newSum;
         _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(newCostText)}</big></b>");
         

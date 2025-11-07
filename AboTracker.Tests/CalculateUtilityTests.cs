@@ -66,7 +66,7 @@ namespace AboTracker.Tests
         [Fact]
         public void CalculateMonthlySum_ComputesCorrectSum()
         {
-            Assert.Equal(76.75,CalculateUtility.CalculateMonthlySum(_aboList));
+            Assert.Equal(76.75,CalculateUtility.CalculateTotalMonthlySum(_aboList));
         }
         
     }

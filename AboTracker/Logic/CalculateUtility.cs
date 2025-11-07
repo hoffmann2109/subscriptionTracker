@@ -5,33 +5,42 @@ namespace AboTracker.Logic;
 public static class CalculateUtility
 {
     
-    public static double CalculateMonthlySum(IEnumerable<Subscription> subscriptions)
+    public static double CalculateTotalMonthlySum(IEnumerable<Subscription> subscriptions)
     {
         double totalYearly = 0;
 
         foreach (var s in subscriptions)
         {
-            switch (s.PaymentPeriod)
-            {
-                case "Daily":
-                    totalYearly += (double)(s.Amount * 365);
-                    break;
-                case "Weekly":
-                    totalYearly += (double)(s.Amount * 52);
-                    break;
-                case "Quarterly":
-                    totalYearly += (double)(s.Amount * 4);
-                    break;
-                case "Monthly": 
-                    totalYearly += (double)(s.Amount * 12);
-                    break;
-                case "Yearly": 
-                    totalYearly += (double)s.Amount;
-                    break;
-            }
+            totalYearly += CalculateMonthlySum(s);
         }
         
-        return totalYearly / 12.0;
+        return totalYearly;
+    }
+
+    public static double CalculateMonthlySum(Subscription s)
+    {
+        double result = 0;
+        
+        switch (s.PaymentPeriod)
+        {
+            case "Daily":
+                result = (double)(s.Amount * 365);
+                break;
+            case "Weekly":
+                result = (double)(s.Amount * 52);
+                break;
+            case "Quarterly":
+                result = (double)(s.Amount * 4);
+                break;
+            case "Monthly": 
+                result = (double)(s.Amount * 12);
+                break;
+            case "Yearly": 
+                result = (double)s.Amount;
+                break;
+        }
+
+        return double.Round(result / 12, 2);
     }
 
     public static void ComputeNextPaymentDate(IEnumerable<Subscription> subscriptions)
