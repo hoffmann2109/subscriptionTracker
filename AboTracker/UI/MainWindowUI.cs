@@ -43,44 +43,7 @@ public class MainWindowUi : ApplicationWindow
         this.Application = app; 
         this.Title = "Simple Abo Tracker";
         this.SetDefaultSize(550, 650);
-        SetCssClass();
-    }
-
-    private void SetCssClass()
-    {
-        var cssProvider = CssProvider.New();
-        string categoryCss = """
-                             /* Default style for all indicators */
-                             .category-indicator {
-                                 background-color: #888; /* A default gray */
-                                 border-radius: 2px;
-                             }
-
-                             /* Your specific category colors */
-                             .category-entertainment {
-                                 background-color: #E50914; /* Red */
-                             }
-
-                             .category-news {
-                                 background-color: #0078F2; /* Blue */
-                             }
-
-                             .category-utility {
-                                 background-color: #1DB954; /* Green  */
-                             }
-
-                             /* Add more categories as needed... */
-                             .category-sports {
-                                 background-color: #F5C518; /* Yellow */
-                             }
-                             """;
-        
-        cssProvider.LoadFromData(categoryCss, -1);
-        Gtk.StyleContext.AddProviderForDisplay(
-            this.GetDisplay(), 
-            cssProvider, 
-            800 // Style priority
-        );
+        StyleManager.LoadGlobalCss(this.GetDisplay());
     }
 
     // Set layout and add all boxes to main box
@@ -142,22 +105,6 @@ public class MainWindowUi : ApplicationWindow
     {
         var addButton = Button.NewWithLabel("Add");
         addButton.AddCssClass("add-button-custom");
-        string buttonCss = """
-                           .add-button-custom {
-                               background-image: none;
-                               background-color: #80B4B3;
-                               color: #313744;
-                               border-radius: 5px;
-                           }
-
-                           .add-button-custom:hover {
-                               background-color: #6DA4A3;
-                           }
-                           """;
-        
-        var cssProvider = CssProvider.New();
-        cssProvider.LoadFromData(buttonCss, -1);
-        addButton.GetStyleContext().AddProvider(cssProvider, 800);
         
         _navigationContainer.Append(addButton);
         
