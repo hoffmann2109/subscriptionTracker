@@ -219,7 +219,7 @@ public class MainWindowUi : ApplicationWindow
         
         editButton.OnClicked +=  (sender, e) =>
         {
-            var editDialog = new AddDialogUi(this, ReloadSubscriptionList);
+            var editDialog = new EditDialogUi(this, ReloadSubscriptionList);
             editDialog.CreateAndShowEditDialog(sub);
         };
     }

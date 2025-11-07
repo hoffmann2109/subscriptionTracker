@@ -26,8 +26,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         dialog.SetChild(mainBox);
 
         AddFormFields(mainBox);
-
-        // Button box
+        
         var buttonBox = Box.New(Orientation.Horizontal, 6);
         buttonBox.SetHalign(Align.End);
         buttonBox.SetMarginTop(12);
@@ -38,56 +37,6 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         InsertAddButton(buttonBox, dialog);
 
         dialog.Show();
-    }
-
-    public void CreateAndShowEditDialog(Subscription sub)
-    {
-        var dialog = WindowSetup();
-
-        var mainBox = AddMainBox();
-        dialog.SetChild(mainBox);
-
-        AddFormFields(mainBox);
-        
-        // Button box
-        var buttonBox = Box.New(Orientation.Horizontal, 6);
-        buttonBox.SetHalign(Align.End);
-        buttonBox.SetMarginTop(12);
-        mainBox.Append(buttonBox);
-
-        AddCancelButton(buttonBox, dialog);
-
-        InsertEditButton(buttonBox, dialog, sub);
-
-        SetFormFieldText(sub);
-        
-        dialog.Show();
-    }
-
-    private void SetFormFieldText(Subscription sub)
-    {
-        _nameEntry?.SetText(sub.Name);
-        _amountEntry?.SetText(sub.Amount.ToString(CultureInfo.InvariantCulture));
-        _categoryEntry?.SetText(sub.Category);
-        
-        // Set period:
-        int periodIndex = Array.IndexOf(_periods, sub.PaymentPeriod);
-        
-        if (periodIndex == -1)
-        {
-            periodIndex = 0; 
-        }
-        _periodEntry?.SetSelected((uint)periodIndex);
-
-        // Set Purchase Date:
-        if (DateTime.TryParseExact(sub.PurchaseDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var purchaseDate))
-        {
-            _selectedPurchaseDate = purchaseDate;
-            _purchaseDateButton?.SetLabel(_selectedPurchaseDate.ToString("dd.MM.yyyy"));
-            
-            var gDateTime = GLib.DateTime.NewLocal(purchaseDate.Year, purchaseDate.Month, purchaseDate.Day, 0, 0, 0);
-            if (gDateTime != null) _purchaseDateCalendar?.SelectDay(gDateTime);
-        }
     }
 
     private void InsertAddButton(Box buttonBox, Window dialog)
@@ -107,41 +56,8 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
             }
         };
     }
-
-    private void InsertEditButton(Box buttonBox, Window dialog, Subscription sub)
-    {
-        var editButton = Button.NewWithLabel("Edit Subscription");
-        editButton.AddCssClass("suggested-action");
-        buttonBox.Append(editButton);
-
-        editButton.OnClicked += (sender, e) =>
-        {
-            // Validate the inputs from the form:
-            var updatedData = ValidateAndExtractData();
-
-            // If validation fails: error label
-            if (updatedData == null)
-            {
-                return;
-            }
-            
-            sub.Name = updatedData.Name;
-            sub.Amount = updatedData.Amount;
-            sub.PaymentPeriod = updatedData.PaymentPeriod;
-            sub.PurchaseDate = updatedData.PurchaseDate;
-            sub.NextPaymentDate = updatedData.NextPaymentDate;
-            sub.Category = updatedData.Category;
-
-            // Save the changes
-            StorageManager.SaveListToJson();
-            
-            onSubscriptionAdded?.Invoke();
-            
-            dialog.Close();
-        };
-    }
-
-    private static void AddCancelButton(Box buttonBox, Window dialog)
+    
+    internal static void AddCancelButton(Box buttonBox, Window dialog)
     {
         var cancelButton = Button.NewWithLabel("Cancel");
         buttonBox.Append(cancelButton);
@@ -149,7 +65,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         cancelButton.OnClicked += (sender, e) => { dialog.Close(); };
     }
     
-    private Subscription? ValidateAndExtractData()
+    internal Subscription? ValidateAndExtractData()
     {
         var name = _nameEntry?.GetText().Trim();
         var amountText = _amountEntry?.GetText();
@@ -263,7 +179,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         StorageManager.SaveListToJson();
     }
 
-    private void AddFormFields(Box mainBox)
+    internal void AddFormFields(Box mainBox)
     {
         // Name:
         var nameLabel = Label.New("Subscription Name:");
@@ -330,7 +246,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         mainBox.Append(_errorLabel);
     }
 
-    private Window WindowSetup()
+    internal Window WindowSetup()
     {
         var dialog = Window.New();
         dialog.SetTransientFor(parentWindow);
@@ -341,7 +257,7 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         return dialog;
     }
 
-    private Box AddMainBox()
+    internal Box AddMainBox()
     {
         var mainBox = Box.New(Orientation.Vertical, 12);
         mainBox.SetMarginTop(12);
@@ -350,5 +266,31 @@ public class AddDialogUi(Window parentWindow, Action onSubscriptionAdded)
         mainBox.SetMarginEnd(12);
 
         return mainBox;
+    }
+    
+    internal void SetFormFieldText(Subscription sub)
+    {
+        _nameEntry?.SetText(sub.Name);
+        _amountEntry?.SetText(sub.Amount.ToString(CultureInfo.InvariantCulture));
+        _categoryEntry?.SetText(sub.Category);
+        
+        // Set period:
+        int periodIndex = Array.IndexOf(_periods, sub.PaymentPeriod);
+        
+        if (periodIndex == -1)
+        {
+            periodIndex = 0; 
+        }
+        _periodEntry?.SetSelected((uint)periodIndex);
+
+        // Set Purchase Date:
+        if (DateTime.TryParseExact(sub.PurchaseDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var purchaseDate))
+        {
+            _selectedPurchaseDate = purchaseDate;
+            _purchaseDateButton?.SetLabel(_selectedPurchaseDate.ToString("dd.MM.yyyy"));
+            
+            var gDateTime = GLib.DateTime.NewLocal(purchaseDate.Year, purchaseDate.Month, purchaseDate.Day, 0, 0, 0);
+            if (gDateTime != null) _purchaseDateCalendar?.SelectDay(gDateTime);
+        }
     }
 }
