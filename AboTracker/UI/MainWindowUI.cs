@@ -3,7 +3,6 @@ using AboTracker.Model;
 using GLib;
 using Gtk;
 using Application = Gtk.Application;
-using DateTime = System.DateTime;
 
 namespace AboTracker.UI;
 
@@ -44,6 +43,44 @@ public class MainWindowUi : ApplicationWindow
         this.Application = app; 
         this.Title = "Simple Abo Tracker";
         this.SetDefaultSize(550, 650);
+        SetCssClass();
+    }
+
+    private void SetCssClass()
+    {
+        var cssProvider = CssProvider.New();
+        string categoryCss = """
+                             /* Default style for all indicators */
+                             .category-indicator {
+                                 background-color: #888; /* A default gray */
+                                 border-radius: 2px;
+                             }
+
+                             /* Your specific category colors */
+                             .category-entertainment {
+                                 background-color: #E50914; /* Red */
+                             }
+
+                             .category-news {
+                                 background-color: #0078F2; /* Blue */
+                             }
+
+                             .category-utility {
+                                 background-color: #1DB954; /* Green  */
+                             }
+
+                             /* Add more categories as needed... */
+                             .category-sports {
+                                 background-color: #F5C518; /* Yellow */
+                             }
+                             """;
+        
+        cssProvider.LoadFromData(categoryCss, -1);
+        Gtk.StyleContext.AddProviderForDisplay(
+            this.GetDisplay(), 
+            cssProvider, 
+            800 // Style priority
+        );
     }
 
     // Set layout and add all boxes to main box
@@ -72,7 +109,7 @@ public class MainWindowUi : ApplicationWindow
         _calculationContainer.SetMarginEnd(12);
         
         var initialSum = Math.Round(CalculateUtility.CalculateMonthlySum(subscriptions), 2);
-        var initialCostText = " Monthly Cost: " + "€" + initialSum;
+        var initialCostText = "Average Monthly Sum: " + "€" + initialSum;
         _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(initialCostText)}</big></b>");
         _monthlyCostLabel.SetUseMarkup(true);
         
@@ -165,6 +202,25 @@ public class MainWindowUi : ApplicationWindow
         box.SetMarginBottom(12);
         box.SetMarginStart(12);
         box.SetMarginEnd(12);
+        
+        var categoryIndicator = Box.New(Orientation.Vertical, 0);
+        categoryIndicator.SetVexpand(true);
+        categoryIndicator.SetValign(Align.Fill);
+        categoryIndicator.SetSizeRequest(5, -1);
+        categoryIndicator.SetMarginEnd(6);
+
+        // Sanitize category name for use as a CSS class
+        // (e.g., "Video Streaming" -> "category-video-streaming")
+        var categoryCssClass = "category-" + System.Text.RegularExpressions.Regex.Replace(
+            sub.Category.ToLower(), 
+            @"[^a-z0-9]+", 
+            "-"
+        ).Trim('-');
+        
+        categoryIndicator.AddCssClass("category-indicator");
+        categoryIndicator.AddCssClass(categoryCssClass);
+        
+        box.Append(categoryIndicator);
         
         // Add a label and a button:
         var textBox = Box.New(Orientation.Vertical, 2);
@@ -261,7 +317,7 @@ public class MainWindowUi : ApplicationWindow
         CreateElementsFromArray(StorageManager.Subscriptions);
         
         var newSum = Math.Round(CalculateUtility.CalculateMonthlySum(StorageManager.Subscriptions), 2);
-        var newCostText = " Monthly Cost: " + "€" + newSum;
+        var newCostText = "Average Monthly Sum: " + "€" + newSum;
         _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(newCostText)}</big></b>");
         
         _sortComboBox.SetActive(0);
