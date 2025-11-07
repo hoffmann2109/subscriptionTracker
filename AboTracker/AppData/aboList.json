@@ -3,80 +3,72 @@
     "name": "Google AI Pro",
     "amount": 21.99,
     "paymentPeriod": "Monthly",
-    "purchaseDate": "10.10.2025",
-    "nextPaymentDate": "10.11.2025",
+    "purchaseDate": "06.10.2025",
+    "nextPaymentDate": "06.11.2025",
     "category": "utility"
   },
   {
     "name": "Mullvad VPN",
     "amount": 5,
     "paymentPeriod": "Monthly",
-    "purchaseDate": "01.02.2025",
-    "nextPaymentDate": "01.02.2026",
+    "purchaseDate": "28.10.2025",
+    "nextPaymentDate": "28.11.2026",
     "category": "utility"
   },
   {
     "name": "Bein Sports PH",
-    "amount": 39.99,
-    "paymentPeriod": "Monthly",
-    "purchaseDate": "20.10.2025",
-    "nextPaymentDate": "20.11.2025",
-    "category": "food"
+    "amount": 20.70,
+    "paymentPeriod": "Yearly",
+    "purchaseDate": "01.11.2025",
+    "nextPaymentDate": "01.11.2026",
+    "category": "entertainment"
   },
   {
     "name": "Macrofactor",
     "amount": 79.99,
     "paymentPeriod": "Yearly",
-    "purchaseDate": "01.09.2025",
-    "nextPaymentDate": "01.12.2025",
+    "purchaseDate": "28.04.2025",
+    "nextPaymentDate": "28.04.2026",
     "category": "utility"
   },
   {
     "name": "PS Plus",
     "amount": 8.99,
     "paymentPeriod": "Monthly",
-    "purchaseDate": "01.11.2025",
-    "nextPaymentDate": "01.12.2025",
+    "purchaseDate": "28.10.2025",
+    "nextPaymentDate": "28.11.2025",
     "category": "entertainment"
   },
   {
     "name": "Spotify",
     "amount": 42,
     "paymentPeriod": "Yearly",
-    "purchaseDate": "15.01.2025",
-    "nextPaymentDate": "15.01.2026",
+    "purchaseDate": "30.01.2025",
+    "nextPaymentDate": "30.01.2026",
     "category": "entertainment"
   },
   {
     "name": "Gym",
     "amount": 29.99,
     "paymentPeriod": "Monthly",
-    "purchaseDate": "25.10.2025",
-    "nextPaymentDate": "25.11.2025",
+    "purchaseDate": "01.10.2025",
+    "nextPaymentDate": "01.11.2025",
     "category": "sports"
   },
   {
-    "name": "Youtube",
-    "amount": 24.50,
+    "name": "Youtube Premium",
+    "amount": 7.49,
     "paymentPeriod": "Monthly",
-    "purchaseDate": "18.10.2025",
-    "nextPaymentDate": "18.11.2025",
-    "category": "pets"
-  },
-  {
-    "name": "CineMax GO",
-    "amount": 11.99,
-    "paymentPeriod": "Monthly",
-    "purchaseDate": "02.10.2025",
-    "nextPaymentDate": "02.11.2025",
+    "purchaseDate": "02.12.2025",
+    "nextPaymentDate": "02.01.2026",
     "category": "entertainment"
   },
   {
-    "name": "SecureHome Monitor",
-    "amount": 120.00,
+    "name": "Amazon Prime",
+    "amount": 45,
     "paymentPeriod": "Yearly",
-    "purchaseDate": "01.12.2024",
-    "nextPaymentDate": "01.12.2025",
-    "category": "utilities"
+    "purchaseDate": "08.04.2025",
+    "nextPaymentDate": "08.04.2026",
+    "category": "utility"
   }
 ]
