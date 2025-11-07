@@ -10,7 +10,7 @@ public static class StorageManager
         
     private static readonly string JsonFilePath = Path.Combine(
         AppContext.BaseDirectory, 
-        "aboList.json"
+        "AppData/aboList.json"
     );
     
     public static List<Subscription> Subscriptions { get; private set; } = [];

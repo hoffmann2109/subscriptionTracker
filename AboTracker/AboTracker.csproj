@@ -15,7 +15,7 @@
       <None Update="Logic\aboList.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="aboList.json">
+      <None Update="AppData\aboList.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

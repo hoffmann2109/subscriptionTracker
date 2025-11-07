@@ -4,4 +4,4 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 AboTracker/myAbos.json
-AboTracker/aboList.json
+AboTracker/AppData/aboList.json
