@@ -15,6 +15,7 @@ public class MainWindowUi : ApplicationWindow
     private readonly Box _calculationContainer;
     private readonly Label _monthlyCostLabel = Label.New("?");
     private readonly ComboBoxText _sortComboBox;
+    private readonly SearchEntry _searchEntry;
     
     // Main Window:
     public MainWindowUi(Application app, IEnumerable<Subscription> subscriptions)
@@ -30,6 +31,7 @@ public class MainWindowUi : ApplicationWindow
         _calculationContainer = Box.New(Orientation.Vertical, 6);
         _navigationContainer = Box.New(Orientation.Horizontal, 12);
         _sortComboBox = ComboBoxText.New();
+        _searchEntry = SearchEntry.New();
         
         var enumerable = subscriptions as Subscription[] ?? subscriptions.ToArray();
         
@@ -61,6 +63,7 @@ public class MainWindowUi : ApplicationWindow
         subscriptionScroller.SetMarginBottom(12);
         subscriptionScroller.SetMarginStart(12);
         subscriptionScroller.SetMarginEnd(12);
+        _subscriptionListContainer.SetValign(Align.Start);
         subscriptionScroller.SetChild(_subscriptionListContainer);
         
         _rootBox.Append(subscriptionScroller);
@@ -87,7 +90,8 @@ public class MainWindowUi : ApplicationWindow
         _navigationContainer.SetMarginStart(12);
         _navigationContainer.SetMarginEnd(12);
         _rootBox.Append(_navigationContainer);
-        
+
+        CreateSearchWindow();
         CreateSortingBox();
         CreateAndStyleAddButton();
 
@@ -115,6 +119,48 @@ public class MainWindowUi : ApplicationWindow
         };
     }
 
+    private void CreateSearchWindow()
+    {
+        _searchEntry.SetPlaceholderText("Search by name or category...");
+        _searchEntry.SetHexpand(true); // Make the search bar expand
+        _searchEntry.OnSearchChanged += OnSearchChanged;
+        _navigationContainer.Append(_searchEntry);
+    }
+    
+    private void OnSearchChanged(object? sender, EventArgs e)
+    {
+        RefreshSubscriptionView();
+    }
+    
+    private void RefreshSubscriptionView()
+    {
+        var currentList = StorageManager.Subscriptions;
+        
+        var searchText = _searchEntry.GetText().ToLowerInvariant().Trim();
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            currentList = currentList.Where(s =>
+                s.Name.ToLowerInvariant().Contains(searchText) ||
+                s.Category.ToLowerInvariant().Contains(searchText)
+            ).ToList();
+        }
+        
+        var activeSort = _sortComboBox.GetActiveText();
+        IEnumerable<Subscription> finalList = currentList;
+        
+        if (_sortComboBox.GetActive() != 0)
+        {
+            finalList = CalculateUtility.SortList(currentList, activeSort);
+        }
+        
+        while (_subscriptionListContainer.GetFirstChild() is { } child)
+        {
+            _subscriptionListContainer.Remove(child);
+        }
+        
+        CreateElementsFromArray(finalList);
+    }
+
     private void CreateSortingBox()
     {
         // Sort ComboBox:
@@ -126,7 +172,6 @@ public class MainWindowUi : ApplicationWindow
         _sortComboBox.AppendText("Purchase Date (Newest)");
         _sortComboBox.AppendText("Payment Period");
         _sortComboBox.AppendText("Category (A-Z)");
-        _sortComboBox.SetHexpand(true);
         _sortComboBox.SetActive(0);
         _sortComboBox.OnChanged += OnSortChanged;
         _navigationContainer.Append(_sortComboBox);
@@ -229,44 +274,23 @@ public class MainWindowUi : ApplicationWindow
     
     private void OnSortChanged(object? sender, EventArgs e)
     {
-        var activeSort = _sortComboBox.GetActiveText();
-        
-        if (_sortComboBox.GetActive() == 0)
-        {
-            while (_subscriptionListContainer.GetFirstChild() is { } child)
-            {
-                _subscriptionListContainer.Remove(child);
-            }
-            CreateElementsFromArray(StorageManager.Subscriptions);
-            return;
-        }
-
-        var listToSort = StorageManager.Subscriptions;
-        var sortedList = CalculateUtility.SortList(listToSort, activeSort);
-        
-        while (_subscriptionListContainer.GetFirstChild() is { } child)
-        {
-            _subscriptionListContainer.Remove(child);
-        }
-        
-        CreateElementsFromArray(sortedList);
+        RefreshSubscriptionView();
     }
 
     private void ReloadSubscriptionList()
     {
-        while (_subscriptionListContainer.GetFirstChild() is { } child)
-        {
-            _subscriptionListContainer.Remove(child);
-        }
-        
+        // Get fresh data
         StorageManager.InitializeArray();
         
-        CreateElementsFromArray(StorageManager.Subscriptions);
+        // Reset UI controls
+        _sortComboBox.SetActive(0);
+        _searchEntry.SetText(""); // Clear the search bar
         
+        RefreshSubscriptionView();
+        
+        // Update the total sum:
         var newSum = Math.Round(CalculateUtility.CalculateTotalMonthlySum(StorageManager.Subscriptions), 2);
         var newCostText = "Average Monthly Sum: " + "€" + newSum;
         _monthlyCostLabel.SetMarkup($"<b><big>{Markup.EscapeText(newCostText)}</big></b>");
-        
-        _sortComboBox.SetActive(0);
     }
 }
