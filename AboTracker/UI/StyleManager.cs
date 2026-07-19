@@ -7,47 +7,85 @@ public static class StyleManager
 {
     public static void LoadGlobalCss(Display display)
     {
+        // 1. Force GTK to prefer the Dark Theme variant globally
+        var settings = Gtk.Settings.GetDefault();
+        if (settings != null)
+        {
+            // Try setting the property directly. If your wrapper version uses 
+            // the string variant, use: settings.SetProperty("gtk-application-prefer-dark-theme", new GLib.Value(true));
+            settings.GtkApplicationPreferDarkTheme = true;
+        }
+
         var cssProvider = CssProvider.New();
+        
+        // 2. Catppuccin Macchiato Color Palette Injection
         string allAppCss = """
-                           /* --- Button Styles --- */
-                           .add-button-custom {
-                               background-image: none;
-                               background-color: #80B4B3;
-                               color: #313744;
-                               border-radius: 5px;
+                           /* --- Base Application Background & Typography --- */
+                           window {
+                               background-color: #24273a; /* Base */
+                               color: #cad3f5;            /* Text */
                            }
 
-                           .add-button-custom:hover {
-                               background-color: #6DA4A3;
+                           label {
+                               color: #cad3f5;            /* Text */
+                           }
+
+                           /* --- Input Fields (Search Bar, etc.) --- */
+                           entry {
+                               background-color: #1e2030; /* Mantle */
+                               color: #cad3f5;            /* Text */
+                               border: 1px solid #494d64; /* Surface1 */
+                               border-radius: 5px;
+                               padding: 6px;
+                           }
+                           
+                           entry:focus {
+                               border-color: #8aadf4;     /* Blue accent on focus */
+                           }
+
+                           /* --- Button Styles (Subtle Variant) --- */
+                           button.add-button-custom {
+                               background-color: #363a4f; /* Surface0 (Matches dropdown) */
+                               border: 1px solid #494d64; /* Surface1 */
+                               border-radius: 5px;
+                               font-weight: bold;
+                           }
+                           
+                           button.add-button-custom label {
+                               color: #8bd5ca; /* Teal Text */
+                           }
+                           
+                           button.add-button-custom:hover {
+                               background-color: #494d64; /* Surface1 */
+                               border-color: #8bd5ca;     /* Teal border on hover */
                            }
 
                            /* --- Category Indicator Styles --- */
-
-                           /* Default style for all indicators */
                            .category-indicator {
-                               background-color: #888; /* A default gray */
+                               background-color: #6e738d; /* Overlay0 (Default gray) */
                                border-radius: 2px;
                            }
 
-                           /* Your specific category colors */
                            .category-entertainment {
-                               background-color: #E50914; /* Red */
+                               background-color: #ed8796; /* Red */
                            }
 
                            .category-news {
-                               background-color: #0078F2; /* Blue */
+                               background-color: #8aadf4; /* Blue */
                            }
 
                            .category-utility {
-                               background-color: #1DB954; /* Green  */
+                               background-color: #a6da95; /* Green */
                            }
 
                            .category-sports {
-                               background-color: #F5C518; /* Yellow */
+                               background-color: #eed49f; /* Yellow */
                            }
+
+                           /* --- Subscription Card Entries --- */
                            .subscription-entry {
-                               background-color: #383F4E;
-                               border: 1px solid #4C566A;
+                               background-color: #363a4f; /* Surface0 */
+                               border: 1px solid #494d64; /* Surface1 */
                                border-radius: 6px;
                                padding: 10px;
                            }
