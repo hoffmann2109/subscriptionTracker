@@ -2,6 +2,8 @@
 
 AboTracker is a simple, cross-platform desktop application built with .NET and Gtk\# to help you track your subscriptions. It provides a clear overview of all your recurring payments, calculates your total monthly cost, and shows you when each subscription is due for its next payment.
 
+**Platform Note:** AboTracker was primarily developed for Linux. While it is fully functional on Windows, it requires you to install GTK 4 in advance. Additionally, because GTK handles themes differently across operating systems, the overall visual appearance (such as dark mode) might be impacted by your Windows settings unless overridden in the code.
+
 -----
 
 ## Features
